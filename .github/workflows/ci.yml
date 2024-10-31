@@ -1,0 +1,23 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - masterplan  # Trigger on pushes to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17' # Specify the Java version required
+          distribution: 'adopt'
+
+      - name: Build with Maven
+        run: mvn clean install
