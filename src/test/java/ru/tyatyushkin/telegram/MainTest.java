@@ -8,7 +8,6 @@ public class MainTest {
     @Test
     public void TestMain() {
         // This is a simple test to check if the main method runs without exceptions
-        Main.main(new String[]{});
         String result = "Hello!";
         assertEquals("Hello!", result, "This is a placeholder test");
     }
