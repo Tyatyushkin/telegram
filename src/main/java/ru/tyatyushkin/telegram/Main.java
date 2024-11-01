@@ -6,6 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Main {
     public static void main(String[] args) throws Exception {
         String app_token = System.getenv("TG_TOKEN");
+        String chat_Id = System.getenv("CHAT_ID");
+
+        if (app_token == null || chat_Id == null) {
+            System.out.println("Переменные окружения TG_TOKEN и CHAT_ID не заданы.");
+            return;
+        }
 
         Bot ma = new Bot(app_token);
 
