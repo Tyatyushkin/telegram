@@ -71,5 +71,8 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ vars.BASTION }} 'docker pull tyatyushkin/telegram:${{ env.VERSION }} && docker run -e TG_TOKEN=${{ secrets.TG_TOKEN }}  -d --name telegram tyatyushkin/telegram:${{ env.VERSION }}'
+          ssh -o StrictHostKeyChecking=no root@${{ vars.BASTION }} '
+          docker stop telegram || true && docker rm telegram || true &&
+          docker pull tyatyushkin/telegram:${{ env.VERSION }} &&
+          docker run -e TG_TOKEN=${{ secrets.TG_TOKEN }} -d --name telegram tyatyushkin/telegram:${{ env.VERSION }}'
       
