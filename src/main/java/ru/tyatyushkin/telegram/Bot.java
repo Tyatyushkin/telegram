@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 
 public class Bot {
     private final String token;
+    private String chatID;
     private static final String API_URL = "https://api.telegram.org/bot";
 
     public Bot(String token) {
@@ -30,5 +31,20 @@ public class Bot {
 
         return content.toString();
     }
+
+    public void sendMessage(String chatId, String message) {
+        this.chatID = chatId;
+        try {
+            URL url = new URL(API_URL + token + "/sendMessage?chat_id=" + chatID + "&text=" + message);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.getInputStream().close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
