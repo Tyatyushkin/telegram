@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VERSION: 0.0.1
 
     steps:
       - name: Checkout code
@@ -25,6 +27,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+
+      - name: Docker build
+        run: docker build --build-arg VERSION=${{ env.VERSION }} -t tyatyushkin\telegram:${{ env.VERSION }} .
+
 
   test:
     runs-on: ubuntu-latest
