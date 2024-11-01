@@ -9,16 +9,21 @@ public class Bot {
     private final String token;
     private String chatID;
     private static final String API_URL = "https://api.telegram.org/bot";
+    private static int lastUpdateId = 0;
 
     public Bot(String token) {
         this.token = token;
+    }
+
+    public static void setLastUpdateId(int updateId) {
+        lastUpdateId = updateId;
     }
 
     public String getUpdates() {
         StringBuilder content = new StringBuilder();
 
         try {
-            URL url = new URL(API_URL + token + "/getUpdates");
+            URL url = new URL(API_URL + token + "/getUpdates?offset=" + (lastUpdateId + 1));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoOutput(true);
