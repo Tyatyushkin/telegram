@@ -37,6 +37,9 @@ public class Main {
                     if (text.toLowerCase().contains("python")) {
                         ma.sendMessage(chatId, "Кому что? А ебуняке лишь бы питона душить");
                     }
+                    if (text.toLowerCase().startsWith("red")) {
+                        ma.sendPhoto(chatId, "https://i.pinimg.com/736x/f7/1f/05/f71f05c7f854aaaeb40800bba1709f2e.jpg");
+                    }
                 }
                 Bot.setLastUpdateId(updateId);
 

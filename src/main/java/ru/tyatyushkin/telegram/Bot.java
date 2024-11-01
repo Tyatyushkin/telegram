@@ -56,6 +56,19 @@ public class Bot {
         }
     }
 
+    public void sendPhoto(String chatId, String photoUrl) {
+        this.chatID = chatId;
+        try {
+            URL url = new URL(API_URL + token + "/sendPhoto?chat_id=" + chatID + "&photo=" + photoUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.getInputStream().close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
