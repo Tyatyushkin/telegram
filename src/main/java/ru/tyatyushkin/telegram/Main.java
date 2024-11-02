@@ -6,13 +6,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Main {
     public static void main(String[] args) throws Exception {
         String app_token = System.getenv("TG_TOKEN");
-
+        String x_token = System.getenv("X_TOKEN");
+        String chatID = System.getenv("CHAT_ID");
+        String username = "masterplan";
         if (app_token == null) {
             System.out.println("Переменная окружения TG_TOKEN не задана!");
             return;
         }
 
         Bot ma = new Bot(app_token);
+        X twitter = new X(x_token);
+
+        String user_ID = twitter.getUserIdByUsername(username);
+        System.out.println("userID: " + user_ID);
+
+        ma.sendMessage(chatID, "userID: " + user_ID);
 
         while (true) {
             String updates = ma.getUpdates();
