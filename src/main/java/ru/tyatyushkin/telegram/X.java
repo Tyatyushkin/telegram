@@ -66,7 +66,7 @@ public class X {
                 String jsonResponse = response.toString();
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode rootNode = objectMapper.readTree(jsonResponse);
-
+                //TODO доописать сортировку последнего твита для корректоного return
                 System.out.println(rootNode.toPrettyString());
 
             } else {
