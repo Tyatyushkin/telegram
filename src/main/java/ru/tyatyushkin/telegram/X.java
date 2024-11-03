@@ -45,6 +45,39 @@ public class X {
         return null;
     }
 
+    public String getLastTweetByUserId(String userId) {
+        try {
+            URL url = new URL("https://api.twitter.com/2/users/" + userId + "/tweets?max_results=5&tweet.fields=created_at");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer " + bearerToken);
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                String jsonResponse = response.toString();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(jsonResponse);
+
+                System.out.println(rootNode.toPrettyString());
+
+            } else {
+                System.out.println("Error: " + responseCode + " - " + connection.getResponseMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static String parseUserIdWithJackson(String jsonResponse) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
