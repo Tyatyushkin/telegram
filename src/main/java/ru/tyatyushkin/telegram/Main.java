@@ -9,6 +9,8 @@ public class Main {
         String x_token = System.getenv("X_TOKEN");
         String chatID = System.getenv("CHAT_ID");
 
+        String userID;
+
         String username = "svtv_news";
         if (app_token == null) {
             System.out.println("Переменная окружения TG_TOKEN не задана!");
@@ -16,6 +18,9 @@ public class Main {
         }
 
         Bot ma = new Bot(app_token);
+        X twitter = new X(x_token);
+        userID = twitter.getUserIdByUsername(username);
+        twitter.getLastTweetByUserId(userID);
 
         while (true) {
             String updates = ma.getUpdates();

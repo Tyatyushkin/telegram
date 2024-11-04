@@ -78,11 +78,13 @@ public class X {
         return null;
     }
 
-    //TODO написать метод получения сообщения по messageId
     public String getMessageByMessageId(String messageId) {
 
         try {
-            URL url = new URL("https://api.twitter.com/2/tweets/" + messageId);
+            URL url = new URL("https://api.twitter.com/2/tweets/" + messageId
+                    + "?tweet.fields=created_at,author_id,text,public_metrics,entities"
+                    + "&expansions=attachments.media_keys,referenced_tweets.id"
+                    + "&media.fields=url,preview_image_url");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Authorization", "Bearer " + bearerToken);
