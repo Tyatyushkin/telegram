@@ -37,7 +37,7 @@ public class Bot {
             in.close();
             conn.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         return content.toString();
@@ -52,7 +52,7 @@ public class Bot {
             conn.getInputStream().close();
             conn.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
@@ -65,7 +65,7 @@ public class Bot {
             conn.getInputStream().close();
             conn.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 }

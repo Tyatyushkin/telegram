@@ -34,8 +34,7 @@ public class X {
                 in.close();
 
                 String jsonResponse = response.toString();
-                String userId = parseUserIdWithJackson(jsonResponse);
-                return userId;
+                return parseUserIdWithJackson(jsonResponse) ;
             } else {
                 System.out.println("Error: " + responseCode + " - " + connection.getResponseMessage() + "limit"  + remainingRequests);
             }
@@ -66,9 +65,10 @@ public class X {
                 String jsonResponse = response.toString();
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode rootNode = objectMapper.readTree(jsonResponse);
-                //TODO доописать сортировку последнего твита для корректоного return
-                System.out.println(rootNode.toPrettyString());
-
+                JsonNode metaNode = rootNode.path("meta");
+                String newestId = metaNode.path("newest_id").asText();
+                System.out.println(newestId);
+                return newestId;
             } else {
                 System.out.println("Error: " + responseCode + " - " + connection.getResponseMessage());
             }
@@ -103,7 +103,8 @@ public class X {
                 String jsonResponse = response.toString();
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode rootNode = objectMapper.readTree(jsonResponse);
-                System.out.println(rootNode.toPrettyString());
+
+                return rootNode.get("data").get("text").asText();
             } else {
                 System.out.println("Error: " + responseCode + " - " + connection.getResponseMessage());
             }

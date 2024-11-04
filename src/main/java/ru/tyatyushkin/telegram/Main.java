@@ -8,10 +8,11 @@ public class Main {
         String app_token = System.getenv("TG_TOKEN");
         String x_token = System.getenv("X_TOKEN");
         String chatID = System.getenv("CHAT_ID");
+        int xTimer = 240;
 
         String userID;
 
-        String username = "svtv_news";
+        String username = "max_katz";
         if (app_token == null) {
             System.out.println("Переменная окружения TG_TOKEN не задана!");
             return;
@@ -20,9 +21,23 @@ public class Main {
         Bot ma = new Bot(app_token);
         X twitter = new X(x_token);
         userID = twitter.getUserIdByUsername(username);
-        twitter.getLastTweetByUserId(userID);
+        int xCount = 240;
+        String lastTweet = null;
+        String  newTweet;
 
         while (true) {
+            //add X methods
+            if (xCount >= xTimer) {
+                newTweet = twitter.getLastTweetByUserId(userID);
+                xCount = 0;
+                if (!newTweet.equals(lastTweet)) {
+                    ma.sendMessage(chatID, "Что же там нового у нашего Максимки?:  " + twitter.getMessageByMessageId(newTweet).replace("\\n", " "));
+                    lastTweet = newTweet;
+                }
+            } else {
+                xCount++;
+            }
+
             String updates = ma.getUpdates();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(updates);
@@ -53,7 +68,7 @@ public class Main {
 
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             }
             catch (Exception e) {
                 e.printStackTrace();
