@@ -78,6 +78,11 @@ public class X {
         return null;
     }
 
+    //TODO написать метод получения сообщения по messageId
+    public String getMessageByMessageId(String messageId) {
+        return null;
+    }
+
     private static String parseUserIdWithJackson(String jsonResponse) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
