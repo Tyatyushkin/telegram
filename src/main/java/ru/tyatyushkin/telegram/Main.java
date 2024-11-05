@@ -8,11 +8,10 @@ public class Main {
         String app_token = System.getenv("TG_TOKEN");
         String x_token = System.getenv("X_TOKEN");
         String chatID = System.getenv("CHAT_ID");
+        String x_username = System.getenv("X_USERNAME");
         int xTimer = 240;
-
         String userID;
-
-        String username = "max_katz";
+        ;
         if (app_token == null) {
             System.out.println("Переменная окружения TG_TOKEN не задана!");
             return;
@@ -20,7 +19,7 @@ public class Main {
 
         Bot ma = new Bot(app_token);
         X twitter = new X(x_token);
-        userID = twitter.getUserIdByUsername(username);
+        userID = twitter.getUserIdByUsername(x_username);
         int xCount = 240;
         String lastTweet = null;
         String  newTweet;
