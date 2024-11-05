@@ -6,15 +6,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Main {
     public static void main(String[] args) throws Exception {
         String app_token = System.getenv("TG_TOKEN");
-
+        String x_token = System.getenv("X_TOKEN");
+        String chatID = System.getenv("CHAT_ID");
+        String x_username = System.getenv("X_USERNAME");
+        int xTimer = 240;
+        String userID;
+        ;
         if (app_token == null) {
             System.out.println("Переменная окружения TG_TOKEN не задана!");
             return;
         }
 
         Bot ma = new Bot(app_token);
+        X twitter = new X(x_token);
+        userID = twitter.getUserIdByUsername(x_username);
+        int xCount = 240;
+        String lastTweet = null;
+        String  newTweet;
 
         while (true) {
+            //add X methods
+            if (xCount >= xTimer) {
+                newTweet = twitter.getLastTweetByUserId(userID);
+                xCount = 0;
+                if (!newTweet.equals(lastTweet)) {
+                    ma.sendMessage(chatID, "Какие есть новости от Мишеньки?:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
+                    lastTweet = newTweet;
+                }
+            } else {
+                xCount++;
+            }
+
             String updates = ma.getUpdates();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(updates);
@@ -45,7 +67,7 @@ public class Main {
 
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             }
             catch (Exception e) {
                 e.printStackTrace();
