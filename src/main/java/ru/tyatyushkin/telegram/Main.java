@@ -38,33 +38,33 @@ public class Main {
             }
 
             String updates = ma.getUpdates();
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(updates);
-            JsonNode resultArray = jsonNode.get("result");
-            System.out.println(jsonNode.toPrettyString());
+            if (updates != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(updates);
+                JsonNode resultArray = jsonNode.get("result");
 
-            for (JsonNode update : resultArray) {
-                int updateId = update.get("update_id").asInt();
-                JsonNode messageNode = update.get("message");
-                if (messageNode != null && messageNode.get("text") != null) {
-                    String text = messageNode.get("text").asText();
-                    String chatId = messageNode.get("chat").get("id").asText();
+                for (JsonNode update : resultArray) {
+                    int updateId = update.get("update_id").asInt();
+                    JsonNode messageNode = update.get("message");
+                    if (messageNode != null && messageNode.get("text") != null) {
+                        String text = messageNode.get("text").asText();
+                        String chatId = messageNode.get("chat").get("id").asText();
 
-                    if (text.toLowerCase().startsWith("gpt")) {
-                        ma.sendMessage(chatId, "Адвокат еще написал методы взаимодействия с chatGPT, но он очень старается!");
+                        if (text.toLowerCase().startsWith("gpt")) {
+                            ma.sendMessage(chatId, "Адвокат еще написал методы взаимодействия с chatGPT, но он очень старается!");
+                        }
+                        if (text.toLowerCase().contains("сиськи")) {
+                            ma.sendMessage(chatId, "Мастерплан еще не придумал как сюда загружать фото сисек, но он о них постоянно думает!");
+                        }
+                        if (text.toLowerCase().contains("python")) {
+                            ma.sendMessage(chatId, "Кому что? А ебуняке лишь бы питона душить");
+                        }
+                        if (text.toLowerCase().startsWith("red")) {
+                            ma.sendPhoto(chatId, "https://i.pinimg.com/736x/f7/1f/05/f71f05c7f854aaaeb40800bba1709f2e.jpg");
+                        }
                     }
-                    if (text.toLowerCase().contains("сиськи")) {
-                        ma.sendMessage(chatId, "Мастерплан еще не придумал как сюда загружать фото сисек, но он о них постоянно думает!");
-                    }
-                    if (text.toLowerCase().contains("python")) {
-                        ma.sendMessage(chatId, "Кому что? А ебуняке лишь бы питона душить");
-                    }
-                    if (text.toLowerCase().startsWith("red")) {
-                        ma.sendPhoto(chatId, "https://i.pinimg.com/736x/f7/1f/05/f71f05c7f854aaaeb40800bba1709f2e.jpg");
-                    }
+                    Bot.setLastUpdateId(updateId);
                 }
-                Bot.setLastUpdateId(updateId);
-
             }
             try {
                 Thread.sleep(5000);
@@ -72,8 +72,6 @@ public class Main {
             catch (Exception e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 }
