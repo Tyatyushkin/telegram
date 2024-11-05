@@ -30,7 +30,7 @@ public class Main {
                 newTweet = twitter.getLastTweetByUserId(userID);
                 xCount = 0;
                 if (!newTweet.equals(lastTweet)) {
-                    ma.sendMessage(chatID, "Что же там нового у нашего Максимки?:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
+                    ma.sendMessage(chatID, "Какие есть новости от Мишеньки?:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
                     lastTweet = newTweet;
                 }
             } else {
