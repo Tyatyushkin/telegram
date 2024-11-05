@@ -70,4 +70,4 @@ jobs:
           ssh -o StrictHostKeyChecking=no root@${{ vars.BASTION }} '
           docker stop telegram-beta || true && docker rm telegram-beta || true &&
           docker pull tyatyushkin/telegram:${{ env.VERSION }}-beta &&
-          docker run -e TG_TOKEN=${{ secrets.TG_TOKEN_TEST }} -e X_TOKEN=${{ secrets.X_TOKEN}} -e CHAT_ID=${{ secrets.CHAT_ID }} -e X_USERNAME=${{ vars.X_USERNAME }} -d --name telegram-beta tyatyushkin/telegram:${{ env.VERSION }}-beta'
+          docker run -e TG_TOKEN=${{ secrets.TG_TOKEN_TEST }} -e X_TOKEN=${{ secrets.X_TOKEN}} -e CHAT_ID=${{ secrets.CHAT_ID_TEST }} -e X_USERNAME=${{ vars.X_USERNAME }} -d --name telegram-beta tyatyushkin/telegram:${{ env.VERSION }}-beta'
