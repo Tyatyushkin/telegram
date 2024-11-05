@@ -20,7 +20,7 @@ public class Main {
         Bot ma = new Bot(app_token);
         X twitter = new X(x_token);
         userID = twitter.getUserIdByUsername(x_username);
-        int xCount = 240;
+        int xCount = 0;
         String lastTweet = null;
         String  newTweet;
 
