@@ -34,7 +34,7 @@ public class Main {
                 if (xCount >= xTimer ) {
                     newTweet = twitter.getLastTweetByUserId(userID);
                     xCount = 0;
-                    if (!newTweet.equals(lastTweet) && newTweet != null) {
+                    if (newTweet != null && !newTweet.equals(lastTweet) ) {
                         ma.sendMessage(chatID, "Post from X:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
                         lastTweet = newTweet;
                     }
