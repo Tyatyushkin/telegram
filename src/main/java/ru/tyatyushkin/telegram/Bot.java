@@ -4,6 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Bot {
     private final String token;
@@ -15,8 +21,62 @@ public class Bot {
         this.token = token;
     }
 
+    public void initialize() {
+        System.out.println("--==START INITIALIZE==--");
+        String app_token = System.getenv("TG_TOKEN");
+        String chatId = System.getenv("CHAT_ID");
+        if (app_token == null) {
+            System.out.println("Ошибка: Задайте значение переменной TG_TOKEN");
+            System.exit(1);
+        } else {
+            System.out.println("TG_TOKEN - прочитан");
+        }
+        if (chatId == null) {
+            System.out.println("Ошибка: Задайте значение пременной CHAT_ID");
+            System.exit(1);
+        } else {
+            System.out.println("CHAT_ID - прочтан");
+            this.chatID = chatId;
+        }
+        System.out.println("--==END INITIALIZE==--");
+    }
+
+    public void createTestBot() {
+        // Инициализация и проверка переменных
+        initialize();
+        // Подключаем бота
+        Telegram telegram = new Telegram(token);
+        // Тестирование расписания
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
+        ZoneId zoneId = ZoneId.of("Europe/Moscow");
+        Runnable morning = () -> {
+            System.out.println("--==TEST SCHEDULER==--");
+            telegram.sendMessage(chatID,"**ТЕСТ Сообщения по расписанию** ~~В 11:00~~");
+            telegram.sendMessage(chatID,"Привет жалкие ||людишки||");
+            System.out.println("--==END==--");
+        };
+        long initialDelay = calculateInitialDelay(zoneId);
+
+        scheduler.scheduleAtFixedRate(morning, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
+        // scheduler.scheduleAtFixedRate(() -> telegram.sendMessage(chatID,"*test* \n||Silent||"),0, 30,TimeUnit.SECONDS );
+    }
+
     public static void setLastUpdateId(int updateId) {
         lastUpdateId = updateId;
+    }
+
+    private static long calculateInitialDelay(ZoneId zoneId) {
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+
+        ZonedDateTime nextRun = now.withHour(9).withMinute(0).withSecond(0).withNano(0);
+
+        // Если текущее время уже прошло 10:00, установка на 10:00 следующего дня
+        if (now.isAfter(nextRun)) {
+            nextRun = nextRun.plusDays(1);
+        }
+
+        // Расчет задержки до следующего запуска
+        return ChronoUnit.MILLIS.between(now, nextRun);
     }
 
     public String getUpdates() {
@@ -37,7 +97,7 @@ public class Bot {
             in.close();
             conn.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         return content.toString();
@@ -52,7 +112,7 @@ public class Bot {
             conn.getInputStream().close();
             conn.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
@@ -65,10 +125,7 @@ public class Bot {
             conn.getInputStream().close();
             conn.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
-
-
-
 }
