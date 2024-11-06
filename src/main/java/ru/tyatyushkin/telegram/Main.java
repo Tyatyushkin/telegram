@@ -25,7 +25,7 @@ public class Main {
             Bot ma = new Bot(app_token);
             X twitter = new X(x_token);
             userID = twitter.getUserIdByUsername(x_username);
-            int xCount = 0;
+            int xCount = 240;
             String lastTweet = null;
             String  newTweet;
 
@@ -34,7 +34,7 @@ public class Main {
                 if (xCount >= xTimer ) {
                     newTweet = twitter.getLastTweetByUserId(userID);
                     xCount = 0;
-                    if (!newTweet.equals(lastTweet)) {
+                    if (!newTweet.equals(lastTweet) && newTweet != null) {
                         ma.sendMessage(chatID, "Post from X:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
                         lastTweet = newTweet;
                     }
