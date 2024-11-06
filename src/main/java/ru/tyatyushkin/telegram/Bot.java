@@ -41,6 +41,10 @@ public class Bot {
         System.out.println("--==END INITIALIZE==--");
     }
 
+    public void createBot() {
+
+    }
+
     public void createTestBot() {
         // Инициализация и проверка переменных
         initialize();
