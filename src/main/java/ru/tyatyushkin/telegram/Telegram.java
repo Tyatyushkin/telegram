@@ -10,6 +10,11 @@ import java.nio.charset.StandardCharsets;
 
 
 public class Telegram {
+    private final String token;
+
+    public Telegram(String token) {
+        this.token = token;
+    }
 
     //TODO перенести методы и переменные из Bot.java в этот класс
 
@@ -19,6 +24,7 @@ public class Telegram {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("chat_id", chatId);
             jsonObject.put("text", message);
+            jsonObject.put("disable_notification", true);
 
             // Show JSON
             ObjectMapper objectMapper = new ObjectMapper();
@@ -28,7 +34,7 @@ public class Telegram {
             System.out.println("--==END==--");
 
             // Создаём URL для метода sendMessage
-            URL url = new URL("https://api.telegram.org/bot");
+            URL url = new URL("https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + message);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             // Настраиваем параметры запроса
@@ -52,8 +58,5 @@ public class Telegram {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 }
