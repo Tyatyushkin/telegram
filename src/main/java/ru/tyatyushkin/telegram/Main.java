@@ -32,11 +32,13 @@ public class Main {
             while (true) {
                 //add X methods
                 if (xCount >= xTimer) {
-                    newTweet = twitter.getLastTweetByUserId(userID);
-                    xCount = 0;
+                    if (twitter.getLastTweetByUserId(userID) != null) {
+                        newTweet = twitter.getLastTweetByUserId(userID);
+                        xCount = 0;
                         if (!newTweet.equals(lastTweet)) {
-                        ma.sendMessage(chatID, "Post from X:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
-                        lastTweet = newTweet;
+                            ma.sendMessage(chatID, "Post from X:  " + twitter.getMessageByMessageId(newTweet).replaceAll("\\n", " "));
+                            lastTweet = newTweet;
+                        }
                     }
                 } else {
                     xCount++;
