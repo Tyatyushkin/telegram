@@ -89,8 +89,8 @@ public class Bot {
                             String text = messageNode.get("text").asText();
                             String chatId = messageNode.get("chat").get("id").asText();
 
-                            if (text.toLowerCase().startsWith("gpt")) {
-                                telegram.sendMessage(chatId, "Адвокат еще написал методы взаимодействия с chatGPT, но он очень старается!");
+                            if (text.toLowerCase().startsWith("хуй")) {
+                                telegram.sendMessage(chatId, "Трусы свои пожуй!");
                             }
                         }
                         setLastUpdateId(updateId);
