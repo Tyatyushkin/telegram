@@ -56,8 +56,7 @@ public class Bot {
             }
 
         };
-        scheduler.scheduleAtFixedRate(check, 0, 5, TimeUnit.SECONDS);
-        //TODO добавить обработку сообщений через getUpdates
+        scheduler.scheduleAtFixedRate(check, 0, 60, TimeUnit.SECONDS);
     }
 
     public void createTestBot() {
@@ -81,7 +80,7 @@ public class Bot {
                     ObjectMapper objectMapper = new ObjectMapper();
                     JsonNode jsonNode = objectMapper.readTree(updates);
                     JsonNode resultArray = jsonNode.get("result");
-
+                    //System.out.println(resultArray.toPrettyString());
                     for (JsonNode update : resultArray) {
                         int updateId = update.get("update_id").asInt();
                         JsonNode messageNode = update.get("message");
@@ -90,10 +89,11 @@ public class Bot {
                             String chatId = messageNode.get("chat").get("id").asText();
 
                             if (text.toLowerCase().startsWith("хуй")) {
+                                System.out.println("хуй");
                                 telegram.sendMessage(chatId, "Трусы свои пожуй\\!");
                             }
                         }
-                        setLastUpdateId(updateId);
+                        Telegram.setLastUpdateId(updateId);
                     }
 
                 }
