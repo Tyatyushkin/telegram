@@ -16,6 +16,7 @@ public class Bot {
     private String chatID;
     private static final String API_URL = "https://api.telegram.org/bot";
     private static int lastUpdateId = 0;
+    private ScheduledExecutorService test = Executors.newScheduledThreadPool(4);
 
     public Bot(String token) {
         this.token = token;
@@ -42,6 +43,13 @@ public class Bot {
     }
 
     public void createBot() {
+        initialize();
+        Telegram telegram = new Telegram(token);
+        Runnable check = () -> {
+            System.out.println("HELLO!");
+
+        };
+        test.scheduleAtFixedRate(check, 0, 30, TimeUnit.MINUTES);
 
     }
 
@@ -126,16 +134,4 @@ public class Bot {
         }
     }
 
-    public void sendPhoto(String chatId, String photoUrl) {
-        this.chatID = chatId;
-        try {
-            URL url = new URL(API_URL + token + "/sendPhoto?chat_id=" + chatID + "&photo=" + photoUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.getInputStream().close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
 }

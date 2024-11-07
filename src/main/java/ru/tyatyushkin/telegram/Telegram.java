@@ -100,4 +100,16 @@ public class Telegram {
         }
         return null;
     }
+
+    public void sendPhoto(String chatId, String photoUrl) {
+        try {
+            URL url = new URL(API_URL + token + "/sendPhoto?chat_id=" + chatId + "&photo=" + photoUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.getInputStream().close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+    }
 }
