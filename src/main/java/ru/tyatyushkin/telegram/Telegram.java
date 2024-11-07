@@ -33,20 +33,26 @@ public class Telegram {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoOutput(true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            //TODO добавить обработку ошибок
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
 
-            in.close();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+
+                in.close();
+            } else {
+                System.out.println("Error: " + responseCode + " - " + conn.getResponseMessage());
+            }
             conn.disconnect();
+            return content.toString();
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
 
-        return content.toString();
+        return null;
     }
 
     //TODO перенести методы и переменные из Bot.java в этот класс

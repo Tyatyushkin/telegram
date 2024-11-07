@@ -91,20 +91,26 @@ public class Bot {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoOutput(true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String inputLine;
 
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+
+                in.close();
+            } else {
+                System.out.println("Error: " + responseCode + " - " + conn.getResponseMessage());
             }
-
-            in.close();
             conn.disconnect();
+            return content.toString();
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
 
-        return content.toString();
+        return null;
     }
 
     public void sendMessage(String chatId, String message) {
