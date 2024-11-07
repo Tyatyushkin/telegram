@@ -18,7 +18,6 @@ public class Bot {
     private final String token;
     private String chatID;
     private static final String API_URL = "https://api.telegram.org/bot";
-    private static int lastUpdateId = 0;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
     public Bot(String token) {
@@ -109,9 +108,6 @@ public class Bot {
 
     }
 
-    public static void setLastUpdateId(int updateId) {
-        lastUpdateId = updateId;
-    }
 
     private static long calculateInitialDelay(ZoneId zoneId) {
         ZonedDateTime now = ZonedDateTime.now(zoneId);
@@ -125,49 +121,6 @@ public class Bot {
 
         // Расчет задержки до следующего запуска
         return ChronoUnit.MILLIS.between(now, nextRun);
-    }
-
-    public String getUpdates() {
-        StringBuilder content = new StringBuilder();
-
-        try {
-            URL url = new URL(API_URL + token + "/getUpdates?offset=" + (lastUpdateId + 1));
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoOutput(true);
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                }
-
-                in.close();
-            } else {
-                System.out.println("Error: " + responseCode + " - " + conn.getResponseMessage());
-            }
-            conn.disconnect();
-            return content.toString();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-
-        return null;
-    }
-
-    public void sendMessage(String chatId, String message) {
-        this.chatID = chatId;
-        try {
-            URL url = new URL(API_URL + token + "/sendMessage?chat_id=" + chatID + "&text=" + message);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.getInputStream().close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
     }
 
 }

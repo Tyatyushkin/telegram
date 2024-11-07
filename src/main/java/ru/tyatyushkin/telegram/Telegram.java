@@ -55,8 +55,6 @@ public class Telegram {
         return null;
     }
 
-    //TODO перенести методы и переменные из Bot.java в этот класс
-
     public Runnable sendMessage(String chatId, String message) {
         try {
             // Create JSON
