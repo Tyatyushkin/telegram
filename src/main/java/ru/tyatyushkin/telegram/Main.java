@@ -50,7 +50,7 @@ public class Main {
 
                     for (JsonNode update : resultArray) {
                         int updateId = update.get("update_id").asInt();
-                        JsonNode messageNode = update.get("message");
+                            JsonNode messageNode = update.get("message");
                         if (messageNode != null && messageNode.get("text") != null) {
                             String text = messageNode.get("text").asText();
                             String chatId = messageNode.get("chat").get("id").asText();
@@ -63,9 +63,6 @@ public class Main {
                             }
                             if (text.toLowerCase().contains("python")) {
                                 ma.sendMessage(chatId, "Кому что? А ебуняке лишь бы питона душить");
-                            }
-                            if (text.toLowerCase().startsWith("red")) {
-                                ma.sendPhoto(chatId, "https://i.pinimg.com/736x/f7/1f/05/f71f05c7f854aaaeb40800bba1709f2e.jpg");
                             }
                         }
                         Bot.setLastUpdateId(updateId);

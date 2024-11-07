@@ -1,5 +1,8 @@
 package ru.tyatyushkin.telegram;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -16,11 +19,12 @@ public class Bot {
     private String chatID;
     private static final String API_URL = "https://api.telegram.org/bot";
     private static int lastUpdateId = 0;
-    private ScheduledExecutorService test = Executors.newScheduledThreadPool(4);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
     public Bot(String token) {
         this.token = token;
     }
+    //TODO добавить инициализацию всех переменных
 
     public void initialize() {
         System.out.println("--==START INITIALIZE==--");
@@ -46,11 +50,14 @@ public class Bot {
         initialize();
         Telegram telegram = new Telegram(token);
         Runnable check = () -> {
-            System.out.println("HELLO!");
+            String updates = telegram.getUpdates();
+            if (updates != null) {
+
+            }
 
         };
-        test.scheduleAtFixedRate(check, 0, 30, TimeUnit.MINUTES);
-
+        scheduler.scheduleAtFixedRate(check, 0, 5, TimeUnit.SECONDS);
+        //TODO добавить обработку сообщений через getUpdates
     }
 
     public void createTestBot() {
@@ -59,7 +66,6 @@ public class Bot {
         // Подключаем бота
         Telegram telegram = new Telegram(token);
         // Тестирование расписания
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
         ZoneId zoneId = ZoneId.of("Europe/Moscow");
         Runnable morning = () -> {
             System.out.println("--==TEST SCHEDULER==--");
@@ -67,10 +73,40 @@ public class Bot {
             telegram.sendMessage(chatID,"Привет жалкие ||людишки||");
             System.out.println("--==END==--");
         };
+
+        Runnable getUpdates = () -> {
+            try {
+                String updates = telegram.getUpdates();
+                if (updates != null) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode jsonNode = objectMapper.readTree(updates);
+                    JsonNode resultArray = jsonNode.get("result");
+
+                    for (JsonNode update : resultArray) {
+                        int updateId = update.get("update_id").asInt();
+                        JsonNode messageNode = update.get("message");
+                        if (messageNode != null && messageNode.get("text") != null) {
+                            String text = messageNode.get("text").asText();
+                            String chatId = messageNode.get("chat").get("id").asText();
+
+                            if (text.toLowerCase().startsWith("gpt")) {
+                                telegram.sendMessage(chatId, "Адвокат еще написал методы взаимодействия с chatGPT, но он очень старается!");
+                            }
+                        }
+                        setLastUpdateId(updateId);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        };
+
         long initialDelay = calculateInitialDelay(zoneId);
 
         scheduler.scheduleAtFixedRate(morning, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
-        // scheduler.scheduleAtFixedRate(() -> telegram.sendMessage(chatID,"*test* \n||Silent||"),0, 30,TimeUnit.SECONDS );
+        scheduler.scheduleAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
+
     }
 
     public static void setLastUpdateId(int updateId) {
@@ -82,7 +118,7 @@ public class Bot {
 
         ZonedDateTime nextRun = now.withHour(9).withMinute(0).withSecond(0).withNano(0);
 
-        // Если текущее время уже прошло 10:00, установка на 10:00 следующего дня
+        // Если текущее время уже прошло 9:00, установка на 9:00 следующего дня
         if (now.isAfter(nextRun)) {
             nextRun = nextRun.plusDays(1);
         }
