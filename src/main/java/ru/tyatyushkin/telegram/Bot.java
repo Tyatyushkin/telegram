@@ -90,7 +90,7 @@ public class Bot {
                             String chatId = messageNode.get("chat").get("id").asText();
 
                             if (text.toLowerCase().startsWith("хуй")) {
-                                telegram.sendMessage(chatId, "Трусы свои пожуй!");
+                                telegram.sendMessage(chatId, "Трусы свои пожуй\\!");
                             }
                         }
                         setLastUpdateId(updateId);
