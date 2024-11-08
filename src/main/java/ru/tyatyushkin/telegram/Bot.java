@@ -7,18 +7,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+
 import java.util.concurrent.TimeUnit;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
+
 
 public class Bot {
     private final String token;
     private String chatID;
     private static final String API_URL = "https://api.telegram.org/bot";
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
     public Bot(String token) {
         this.token = token;
@@ -55,7 +51,6 @@ public class Bot {
             }
 
         };
-        scheduler.scheduleAtFixedRate(check, 0, 60, TimeUnit.SECONDS);
     }
 
     public void createTestBot() {
@@ -63,8 +58,9 @@ public class Bot {
         initialize();
         // Подключаем бота
         Telegram telegram = new Telegram(token);
+        // Создаем новый планировщик
+        Scheduler scheduler = new Scheduler();
         // Тестирование расписания
-        ZoneId zoneId = ZoneId.of("Europe/Moscow");
         Runnable morning = () -> {
             System.out.println("--==TEST SCHEDULER==--");
             telegram.sendMessage(chatID,"**ТЕСТ Сообщения по расписанию** ~~В 11:00~~");
@@ -109,26 +105,7 @@ public class Bot {
             }
         };
 
-        long initialDelay = calculateInitialDelay(zoneId);
-
-        scheduler.scheduleAtFixedRate(morning, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
-        scheduler.scheduleAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
-
+        scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
+        scheduler.addTaskDaily(morning, 7, 0);
     }
-
-
-    private static long calculateInitialDelay(ZoneId zoneId) {
-        ZonedDateTime now = ZonedDateTime.now(zoneId);
-
-        ZonedDateTime nextRun = now.withHour(9).withMinute(0).withSecond(0).withNano(0);
-
-        // Если текущее время уже прошло 9:00, установка на 9:00 следующего дня
-        if (now.isAfter(nextRun)) {
-            nextRun = nextRun.plusDays(1);
-        }
-
-        // Расчет задержки до следующего запуска
-        return ChronoUnit.MILLIS.between(now, nextRun);
-    }
-
 }
