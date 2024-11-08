@@ -1,5 +1,6 @@
 package ru.tyatyushkin.telegram;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -111,6 +112,29 @@ public class Telegram {
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+    }
+
+    public void sendInlineButton(String chatId) {
+        JSONObject message = new JSONObject();
+        message.put("chat_id", chatId);
+        message.put("text", "Привет! Нажми кнопку ниже:");
+
+        // Создаем разметку для inline-кнопки
+        JSONObject replyMarkup = new JSONObject();
+        JSONArray inlineKeyboard = new JSONArray();
+        JSONArray row = new JSONArray();
+
+        JSONObject button = new JSONObject();
+        button.put("text", "Посетить Google");
+        button.put("url", "https://google.com");
+
+        row.put(button);
+        inlineKeyboard.put(row);
+        replyMarkup.put("inline_keyboard", inlineKeyboard);
+        message.put("reply_markup", replyMarkup);
+
+        System.out.println("message");
+        sendMessage(chatId, message.toString());
     }
 
 

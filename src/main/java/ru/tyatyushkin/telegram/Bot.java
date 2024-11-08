@@ -137,6 +137,9 @@ public class Bot {
                             if (text.startsWith("json")) {
                                 telegram.sendMessage(ch,"тест новой обработки сообщений");
                             }
+                            if (text.equals("/test")) {
+                                telegram.sendInlineButton(ch);
+                            }
                         }
                     }
                 }
