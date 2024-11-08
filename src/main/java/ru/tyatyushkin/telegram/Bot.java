@@ -106,7 +106,7 @@ public class Bot {
         Telegram telegram = new Telegram(token);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
-        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, ""), 20, 0);
+        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, "Пиздуйте спать, жалкие людишки"), 20, 0);
         scheduler.addTaskAtFixedRate(() -> {
             try {
                 processUpdates(telegram.getUpdates(), telegram);
