@@ -1,7 +1,10 @@
 package ru.tyatyushkin.telegram;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
+
 import java.util.concurrent.TimeUnit;
 
 
@@ -84,42 +87,38 @@ public class Bot {
         Telegram telegram = new Telegram(token);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
-        Runnable getUpdates = () -> {
+        scheduler.addTaskAtFixedRate(() -> {
             try {
-                String updates = telegram.getUpdates();
-                if (updates != null) {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode jsonNode = objectMapper.readTree(updates);
-                    JsonNode resultArray = jsonNode.get("result");
-                    //System.out.println(resultArray.toPrettyString());
-                    for (JsonNode update : resultArray) {
-                        int updateId = update.get("update_id").asInt();
-                        JsonNode messageNode = update.get("message");
-                        if (messageNode != null && messageNode.get("text") != null) {
-                            String text = messageNode.get("text").asText();
-                            String chatId = messageNode.get("chat").get("id").asText();
-
-                            if (text.toLowerCase().startsWith("хуй")) {
-                                System.out.println("хуй");
-                                telegram.sendMessage(chatId, "Трусы свои пожуй\\!");
-                            }
-                            if (text.toLowerCase().contains("ебуняка")) {
-                                System.out.println("ебуняка");
-                                telegram.sendMessage(chatId, "опять эта хитрая рожа что\\-то задумала");
-                            }
-                            if (text.toLowerCase().contains("нюдсы")) {
-                                System.out.println("нюдсы");
-                                telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
-                            }
-                        }
-                        Telegram.setLastUpdateId(updateId);
-                    }
-
+                processUpdates(telegram.getUpdates(), telegram);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
+            }, 0, 5, TimeUnit.SECONDS);
+    }
+
+    public void processUpdates(String getUpdates, Telegram telegram) throws JsonProcessingException {
+        if (getUpdates != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(getUpdates);
+            JsonNode resultArray = jsonNode.get("result");
+            System.out.println(jsonNode.toPrettyString());
+
+            for (JsonNode update : resultArray) {
+                int updateId = update.get("update_id").asInt();
+                JsonNode messageNode = update.get("message");
+                if (messageNode != null && messageNode.get("text") != null) {
+                    String text = messageNode.get("text").asText();
+                    String chatId = messageNode.get("chat").get("id").asText();
+
+                    if (text.toLowerCase().contains("тест")) {
+                        telegram.sendMessage(chatId, "Что мудила криворукая ничего с первого раза сделать не можешь\\?");
+                    }
+                    if (text.toLowerCase().contains("нюдсы")) {
+                        telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                    }
+                }
+                Telegram.setLastUpdateId(updateId);
             }
-        };
-        scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
+        }
     }
 }
