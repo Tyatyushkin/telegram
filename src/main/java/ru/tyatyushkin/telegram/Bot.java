@@ -1,21 +1,16 @@
 package ru.tyatyushkin.telegram;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
+
 import java.util.concurrent.TimeUnit;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
+
 
 public class Bot {
     private final String token;
     private String chatID;
-    private static final String API_URL = "https://api.telegram.org/bot";
-    private static int lastUpdateId = 0;
 
     public Bot(String token) {
         this.token = token;
@@ -25,6 +20,8 @@ public class Bot {
         System.out.println("--==START INITIALIZE==--");
         String app_token = System.getenv("TG_TOKEN");
         String chatId = System.getenv("CHAT_ID");
+        String x_token = System.getenv("X_TOKEN");
+        String x_username = System.getenv("X_USERNAME");
         if (app_token == null) {
             System.out.println("Ошибка: Задайте значение переменной TG_TOKEN");
             System.exit(1);
@@ -38,11 +35,68 @@ public class Bot {
             System.out.println("CHAT_ID - прочтан");
             this.chatID = chatId;
         }
+        if (x_token == null) {
+            System.out.println("Ошибка: Задайте значение пременной X_TOKEN");
+            System.exit(1);
+        }
+        else {
+            System.out.println("X_TOKEN - прочитан");
+        }
+        if (x_username == null) {
+            System.out.println("Ошибка: Задайте значение пременной X_USERNAME");
+            System.exit(1);
+        } else {
+            System.out.println("X_USERNAME - прочитан");
+        }
         System.out.println("--==END INITIALIZE==--");
     }
 
     public void createBot() {
+        initialize();
+        Telegram telegram = new Telegram(token);
+        Scheduler scheduler = new Scheduler();
 
+        Runnable getUpdates = () -> {
+            try {
+                String updates = telegram.getUpdates();
+                if (updates != null) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode jsonNode = objectMapper.readTree(updates);
+                    JsonNode resultArray = jsonNode.get("result");
+                    for (JsonNode update : resultArray) {
+                        int updateId = update.get("update_id").asInt();
+                        JsonNode messageNode = update.get("message");
+                        if (messageNode != null && messageNode.get("text") != null) {
+                            String text = messageNode.get("text").asText();
+                            String chatId = messageNode.get("chat").get("id").asText();
+
+                            if (text.toLowerCase().startsWith("gpt")) {
+                                telegram.sendMessage(chatId, "Адвокат когда ты уже сделаешь меня умным\\?");
+                            }
+                            if (text.toLowerCase().startsWith("хуй")) {
+                                telegram.sendMessage(chatId, "трусы свои пожуй\\!");
+                            }
+                            if (text.toLowerCase().contains("python")) {
+                                telegram.sendMessage(chatId, "Кому, что а ебуняке лишь бы питона душить");
+                            }
+                            if (text.toLowerCase().startsWith("red")) {
+                                telegram.sendMessage(chatId, "Рыжие ушли на покой, попробуй написать нюдсы");
+                            }
+                            if (text.toLowerCase().startsWith("нюдсы")) {
+                                telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                            }
+                        }
+                        telegram.setLastUpdateId(updateId);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        };
+        //TODO добавить интеграцию с X
+        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID,"Утро, мешки с костями\\!"), 7, 0);
+        scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
     public void createTestBot() {
@@ -50,93 +104,43 @@ public class Bot {
         initialize();
         // Подключаем бота
         Telegram telegram = new Telegram(token);
-        // Тестирование расписания
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
-        ZoneId zoneId = ZoneId.of("Europe/Moscow");
-        Runnable morning = () -> {
-            System.out.println("--==TEST SCHEDULER==--");
-            telegram.sendMessage(chatID,"**ТЕСТ Сообщения по расписанию** ~~В 11:00~~");
-            telegram.sendMessage(chatID,"Привет жалкие ||людишки||");
-            System.out.println("--==END==--");
-        };
-        long initialDelay = calculateInitialDelay(zoneId);
-
-        scheduler.scheduleAtFixedRate(morning, initialDelay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
-        // scheduler.scheduleAtFixedRate(() -> telegram.sendMessage(chatID,"*test* \n||Silent||"),0, 30,TimeUnit.SECONDS );
-    }
-
-    public static void setLastUpdateId(int updateId) {
-        lastUpdateId = updateId;
-    }
-
-    private static long calculateInitialDelay(ZoneId zoneId) {
-        ZonedDateTime now = ZonedDateTime.now(zoneId);
-
-        ZonedDateTime nextRun = now.withHour(9).withMinute(0).withSecond(0).withNano(0);
-
-        // Если текущее время уже прошло 10:00, установка на 10:00 следующего дня
-        if (now.isAfter(nextRun)) {
-            nextRun = nextRun.plusDays(1);
-        }
-
-        // Расчет задержки до следующего запуска
-        return ChronoUnit.MILLIS.between(now, nextRun);
-    }
-
-    public String getUpdates() {
-        StringBuilder content = new StringBuilder();
-
-        try {
-            URL url = new URL(API_URL + token + "/getUpdates?offset=" + (lastUpdateId + 1));
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setDoOutput(true);
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
+        // Создаем новый планировщик
+        Scheduler scheduler = new Scheduler();
+        scheduler.addTaskAtFixedRate(() -> {
+            try {
+                processUpdates(telegram.getUpdates(), telegram);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
                 }
+            }, 0, 5, TimeUnit.SECONDS);
+    }
 
-                in.close();
-                conn.disconnect();
-                return content.toString();
-            } else {
-                System.out.println("Error: " + responseCode + " - " + conn.getResponseMessage());
-                conn.disconnect();
-                return null;
+    public void processUpdates(String getUpdates, Telegram telegram) throws JsonProcessingException {
+        //Попробовать переписать на JSON
+        if (getUpdates != null) {
+            JSONObject json = new JSONObject(getUpdates);
+            System.out.println(json);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(getUpdates);
+            JsonNode resultArray = jsonNode.get("result");
+            System.out.println(jsonNode.toPrettyString());
+
+            for (JsonNode update : resultArray) {
+                int updateId = update.get("update_id").asInt();
+                JsonNode messageNode = update.get("message");
+                if (messageNode != null && messageNode.get("text") != null) {
+                    String text = messageNode.get("text").asText();
+                    String chatId = messageNode.get("chat").get("id").asText();
+
+                    if (text.toLowerCase().contains("тест")) {
+                        telegram.sendMessage(chatId, "Что мудила криворукая ничего с первого раза сделать не можешь\\?");
+                    }
+                    if (text.toLowerCase().contains("нюдсы")) {
+                        telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                    }
+                }
+                telegram.setLastUpdateId(updateId);
             }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-        return null;
-    }
-
-    public void sendMessage(String chatId, String message) {
-        this.chatID = chatId;
-        try {
-            URL url = new URL(API_URL + token + "/sendMessage?chat_id=" + chatID + "&text=" + message);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.getInputStream().close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-
-    public void sendPhoto(String chatId, String photoUrl) {
-        this.chatID = chatId;
-        try {
-            URL url = new URL(API_URL + token + "/sendPhoto?chat_id=" + chatID + "&photo=" + photoUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.getInputStream().close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
         }
     }
 }

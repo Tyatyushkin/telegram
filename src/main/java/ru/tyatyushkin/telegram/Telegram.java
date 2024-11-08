@@ -21,9 +21,10 @@ public class Telegram {
         this.token = token;
     }
 
-    public static void setLastUpdateId(int updateId) {
+    public void setLastUpdateId(int updateId) {
         lastUpdateId = updateId;
     }
+
 
     public String getUpdates() {
         StringBuilder content = new StringBuilder();
@@ -43,11 +44,13 @@ public class Telegram {
                 }
 
                 in.close();
+                conn.disconnect();
+                return content.toString();
             } else {
                 System.out.println("Error: " + responseCode + " - " + conn.getResponseMessage());
+                conn.disconnect();
+                return null;
             }
-            conn.disconnect();
-            return content.toString();
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -55,9 +58,7 @@ public class Telegram {
         return null;
     }
 
-    //TODO перенести методы и переменные из Bot.java в этот класс
-
-    public Runnable sendMessage(String chatId, String message) {
+    public void sendMessage(String chatId, String message) {
         try {
             // Create JSON
             JSONObject jsonObject = new JSONObject();
@@ -96,8 +97,21 @@ public class Telegram {
                 System.out.println("Failed to send message. Response Code: " + responseCode);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
-        return null;
     }
+
+    public void sendPhoto(String chatId, String photoUrl) {
+        try {
+            URL url = new URL(API_URL + token + "/sendPhoto?chat_id=" + chatId + "&photo=" + photoUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.getInputStream().close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+    }
+
+
 }
