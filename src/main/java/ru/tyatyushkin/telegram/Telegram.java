@@ -57,7 +57,7 @@ public class Telegram {
         return null;
     }
 
-    public Runnable sendMessage(String chatId, String message) {
+    public void sendMessage(String chatId, String message) {
         try {
             // Create JSON
             JSONObject jsonObject = new JSONObject();
@@ -96,9 +96,8 @@ public class Telegram {
                 System.out.println("Failed to send message. Response Code: " + responseCode);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
-        return null;
     }
 
     public void sendPhoto(String chatId, String photoUrl) {
