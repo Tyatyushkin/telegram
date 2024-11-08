@@ -141,6 +141,15 @@ public class Bot {
                                 telegram.sendInlineButton(ch);
                             }
                         }
+                    } else if (updates.has("callback_query")) {
+                        JSONObject callbackQuery = updates.getJSONObject("callback_query");
+                        String callbackData = callbackQuery.getString("data");
+                        String ch = Long.toString(callbackQuery.getJSONObject("message").getJSONObject("chat").getLong("id"));
+
+                        if (callbackData.equals("info")) {
+                            telegram.sendMessage(ch, "Я бот для тестирования");
+                        }
+                        
                     }
                 }
             }
