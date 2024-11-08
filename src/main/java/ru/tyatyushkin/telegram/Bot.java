@@ -29,21 +29,21 @@ public class Bot {
             System.out.println("TG_TOKEN - прочитан");
         }
         if (chatId == null) {
-            System.out.println("Ошибка: Задайте значение пременной CHAT_ID");
+            System.out.println("Ошибка: Задайте значение переменной CHAT_ID");
             System.exit(1);
         } else {
-            System.out.println("CHAT_ID - прочтан");
+            System.out.println("CHAT_ID - прочитан");
             this.chatID = chatId;
         }
         if (x_token == null) {
-            System.out.println("Ошибка: Задайте значение пременной X_TOKEN");
+            System.out.println("Ошибка: Задайте значение переменной X_TOKEN");
             System.exit(1);
         }
         else {
             System.out.println("X_TOKEN - прочитан");
         }
         if (x_username == null) {
-            System.out.println("Ошибка: Задайте значение пременной X_USERNAME");
+            System.out.println("Ошибка: Задайте значение переменной X_USERNAME");
             System.exit(1);
         } else {
             System.out.println("X_USERNAME - прочитан");
@@ -106,6 +106,7 @@ public class Bot {
         Telegram telegram = new Telegram(token);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
+        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, ""), 20, 0);
         scheduler.addTaskAtFixedRate(() -> {
             try {
                 processUpdates(telegram.getUpdates(), telegram);
@@ -135,8 +136,8 @@ public class Bot {
                     if (text.toLowerCase().contains("тест")) {
                         telegram.sendMessage(chatId, "Что мудила криворукая ничего с первого раза сделать не можешь\\?");
                     }
-                    if (text.toLowerCase().contains("нюдсы")) {
-                        telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                    if (text.toLowerCase().contains("сиськи")) {
+                        telegram.sendPhoto(chatId, "https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg");
                     }
                 }
                 telegram.setLastUpdateId(updateId);
