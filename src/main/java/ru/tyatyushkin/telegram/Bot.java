@@ -3,6 +3,7 @@ package ru.tyatyushkin.telegram;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
@@ -120,11 +121,29 @@ public class Bot {
         //Попробовать переписать на JSON
         if (getUpdates != null) {
             JSONObject json = new JSONObject(getUpdates);
-            System.out.println(json);
+            if (json.getBoolean("ok")) {
+                JSONArray results = json.getJSONArray("result");
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject updates = results.getJSONObject(i);
+                    if (updates.has("message")) {
+                        JSONObject message = updates.getJSONObject("message");
+                        if (message.has("text")) {
+                            String text = message.getString("text");
+                            System.out.println(text);
+                            long chat = message.getJSONObject("chat").getLong("id");
+                            String ch = Long.toString(chat);
+                            System.out.println(chat);
+
+                            if (text.startsWith("json")) {
+                                telegram.sendMessage(ch,"тест новой обработки сообщений");
+                            }
+                        }
+                    }
+                }
+            }
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(getUpdates);
             JsonNode resultArray = jsonNode.get("result");
-            System.out.println(jsonNode.toPrettyString());
 
             for (JsonNode update : resultArray) {
                 int updateId = update.get("update_id").asInt();
