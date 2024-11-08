@@ -36,6 +36,48 @@ public class Bot {
 
     public void createBot() {
         initialize();
+        Telegram telegram = new Telegram(token);
+        Scheduler scheduler = new Scheduler();
+
+        Runnable morning = () -> {
+            telegram.sendMessage(chatID,"Утро, мешки с костями\\!");
+        };
+        Runnable getUpdates = () -> {
+            try {
+                String updates = telegram.getUpdates();
+                if (updates != null) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode jsonNode = objectMapper.readTree(updates);
+                    JsonNode resultArray = jsonNode.get("result");
+                    for (JsonNode update : resultArray) {
+                        int updateId = update.get("update_id").asInt();
+                        JsonNode messageNode = update.get("message");
+                        if (messageNode != null && messageNode.get("text") != null) {
+                            String text = messageNode.get("text").asText();
+                            String chatId = messageNode.get("chat").get("id").asText();
+
+                            if (text.toLowerCase().startsWith("gpt")) {
+                                telegram.sendMessage(chatId, "Адвокат когда ты уже сделаешь меня умным\\?");
+                            }
+                            if (text.toLowerCase().contains("python")) {
+                                telegram.sendMessage(chatId, "Кому, что а ебуняке лишь бы питона душить");
+                            }
+                            if (text.toLowerCase().startsWith("нюдсы")) {
+                                telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                            }
+                        }
+                        Telegram.setLastUpdateId(updateId);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        };
+        //TODO добавить интеграцию с X
+        // Запуск задач
+        scheduler.addTaskDaily(morning, 7, 0);
+        scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
     public void createTestBot() {
@@ -45,14 +87,6 @@ public class Bot {
         Telegram telegram = new Telegram(token);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
-        // Тестирование расписания
-        Runnable morning = () -> {
-            System.out.println("--==TEST SCHEDULER==--");
-            telegram.sendMessage(chatID,"**ТЕСТ Сообщения по расписанию** ~~В 11:00~~");
-            telegram.sendMessage(chatID,"Привет жалкие ||людишки||");
-            System.out.println("--==END==--");
-        };
-
         Runnable getUpdates = () -> {
             try {
                 String updates = telegram.getUpdates();
@@ -78,7 +112,7 @@ public class Bot {
                             }
                             if (text.toLowerCase().contains("нюдсы")) {
                                 System.out.println("нюдсы");
-                                telegram.sendPhoto(chatID, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                                telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
                             }
                         }
                         Telegram.setLastUpdateId(updateId);
@@ -89,8 +123,6 @@ public class Bot {
                 e.printStackTrace(System.out);
             }
         };
-
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
-        scheduler.addTaskDaily(morning, 7, 0);
     }
 }
