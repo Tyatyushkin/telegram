@@ -40,6 +40,7 @@ public class Bot {
         Scheduler scheduler = new Scheduler();
 
         Runnable morning = () -> {
+            System.out.println("morning");
             telegram.sendMessage(chatID,"Утро, мешки с костями\\!");
         };
         Runnable getUpdates = () -> {
