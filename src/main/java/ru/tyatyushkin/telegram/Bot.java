@@ -95,6 +95,10 @@ public class Bot {
                                 System.out.println("ебуняка");
                                 telegram.sendMessage(chatId, "опять эта хитрая рожа что\\-то задумала");
                             }
+                            if (text.toLowerCase().contains("нюдсы")) {
+                                System.out.println("нюдсы");
+                                telegram.sendPhoto(chatID, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
+                            }
                         }
                         Telegram.setLastUpdateId(updateId);
                     }
