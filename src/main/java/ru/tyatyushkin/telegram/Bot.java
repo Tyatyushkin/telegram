@@ -73,9 +73,7 @@ public class Bot {
         };
         //TODO добавить интеграцию с X
         // Запуск задач
-        scheduler.addTaskDaily(() -> {
-            telegram.sendMessage(chatID,"Утро, мешки с костями\\!");
-        }, 7, 0);
+        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID,"Утро, мешки с костями\\!"), 7, 0);
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
