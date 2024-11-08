@@ -149,6 +149,9 @@ public class Bot {
                         if (callbackData.equals("info")) {
                             telegram.sendMessage(ch, "Я бот для тестирования");
                         }
+                        if (callbackData.equals("vpn")) {
+                            telegram.sendMessage(ch, "Если хотите приобрести VPN, обращайтесь к \\@mplane");
+                        }
                         
                     }
                 }

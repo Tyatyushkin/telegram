@@ -165,7 +165,12 @@ public class Telegram {
         JSONObject button1 = new JSONObject();
         button1.put("text", "INFO");
         button1.put("callback_data", "info");
+        // вторая кнопка с callback_data
+        JSONObject button2 = new JSONObject();
+        button2.put("text", "VPN");
+        button2.put("callback_data", "vpn");
         row1.put(button1);
+        row1.put(button2);
 
 
         inlineKeyboard.put(row);
