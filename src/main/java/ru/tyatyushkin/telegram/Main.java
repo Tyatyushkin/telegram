@@ -8,7 +8,7 @@ public class Main {
 
         if (app_token == null) {
             System.out.println("Переменная окружения TG_TOKEN не задана!");
-            return;
+            System.exit(1);
         }
 
         if (test_mode) {
