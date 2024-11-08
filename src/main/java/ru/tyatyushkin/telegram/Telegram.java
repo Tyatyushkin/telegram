@@ -152,20 +152,29 @@ public class Telegram {
         // Создаем разметку для inline-кнопки
         JSONObject replyMarkup = new JSONObject();
         JSONArray inlineKeyboard = new JSONArray();
-        JSONArray row = new JSONArray();
 
+        // Кнопка с ссылкой
+        JSONArray row = new JSONArray();
         JSONObject button = new JSONObject();
         button.put("text", "Посетить Google");
         button.put("url", "https://google.com");
-
         row.put(button);
+
+        // Кнопка с callback_data
+        JSONArray row1 = new JSONArray();
+        JSONObject button1 = new JSONObject();
+        button1.put("text", "INFO");
+        button1.put("callback_data", "info");
+        row1.put(button1);
+
+
         inlineKeyboard.put(row);
+        inlineKeyboard.put(row1);
         replyMarkup.put("inline_keyboard", inlineKeyboard);
         message.put("reply_markup", replyMarkup);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode node = objectMapper.readTree(message.toString());
         System.out.println(node.toPrettyString());
-        System.out.println("message");
         sendPostMessage(message.toString());
     }
 
