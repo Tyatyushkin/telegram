@@ -1,5 +1,6 @@
 package ru.tyatyushkin.telegram;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -102,6 +103,35 @@ public class Telegram {
         }
     }
 
+    public void sendPostMessage(String json) {
+        try {
+            // Создаём URL для метода sendMessage
+            URL url = new URL(API_URL + token + "/sendMessage");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            // Настраиваем параметры запроса
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setDoOutput(true);
+
+            // Отправляем JSON
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            // Проверяем код ответа сервера
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("Message sent successfully.");
+            } else {
+                System.out.println("Failed to send message. Response Code: " + responseCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+    }
+
     public void sendPhoto(String chatId, String photoUrl) {
         try {
             URL url = new URL(API_URL + token + "/sendPhoto?chat_id=" + chatId + "&photo=" + photoUrl);
@@ -114,7 +144,7 @@ public class Telegram {
         }
     }
 
-    public void sendInlineButton(String chatId) {
+    public void sendInlineButton(String chatId) throws JsonProcessingException {
         JSONObject message = new JSONObject();
         message.put("chat_id", chatId);
         message.put("text", "Привет! Нажми кнопку ниже:");
@@ -132,9 +162,11 @@ public class Telegram {
         inlineKeyboard.put(row);
         replyMarkup.put("inline_keyboard", inlineKeyboard);
         message.put("reply_markup", replyMarkup);
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode node = objectMapper.readTree(message.toString());
+        System.out.println(node.toPrettyString());
         System.out.println("message");
-        sendMessage(chatId, message.toString());
+        sendPostMessage(message.toString());
     }
 
 
