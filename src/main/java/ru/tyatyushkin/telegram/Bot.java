@@ -97,6 +97,7 @@ public class Bot {
     }
 
     public void processUpdates(String getUpdates, Telegram telegram) throws JsonProcessingException {
+        //Попробовать переписать на JSON
         if (getUpdates != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(getUpdates);
