@@ -119,6 +119,7 @@ public class Bot {
         //Попробовать переписать на JSON
         if (getUpdates != null) {
             JSONObject json = new JSONObject(getUpdates);
+            System.out.println(json);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(getUpdates);
             JsonNode resultArray = jsonNode.get("result");
