@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 public class Bot {
     private final String token;
     private String chatID;
-    private static final String API_URL = "https://api.telegram.org/bot";
 
     public Bot(String token) {
         this.token = token;
@@ -43,14 +42,6 @@ public class Bot {
 
     public void createBot() {
         initialize();
-        Telegram telegram = new Telegram(token);
-        Runnable check = () -> {
-            String updates = telegram.getUpdates();
-            if (updates != null) {
-
-            }
-
-        };
     }
 
     public void createTestBot() {
