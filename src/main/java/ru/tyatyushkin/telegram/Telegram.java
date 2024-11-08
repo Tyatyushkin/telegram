@@ -43,11 +43,13 @@ public class Telegram {
                 }
 
                 in.close();
+                conn.disconnect();
+                return content.toString();
             } else {
                 System.out.println("Error: " + responseCode + " - " + conn.getResponseMessage());
+                conn.disconnect();
+                return null;
             }
-            conn.disconnect();
-            return content.toString();
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
