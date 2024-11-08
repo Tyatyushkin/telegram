@@ -15,12 +15,13 @@ public class Bot {
     public Bot(String token) {
         this.token = token;
     }
-    //TODO добавить инициализацию всех переменных
 
     public void initialize() {
         System.out.println("--==START INITIALIZE==--");
         String app_token = System.getenv("TG_TOKEN");
         String chatId = System.getenv("CHAT_ID");
+        String x_token = System.getenv("X_TOKEN");
+        String x_username = System.getenv("X_USERNAME");
         if (app_token == null) {
             System.out.println("Ошибка: Задайте значение переменной TG_TOKEN");
             System.exit(1);
@@ -33,6 +34,19 @@ public class Bot {
         } else {
             System.out.println("CHAT_ID - прочтан");
             this.chatID = chatId;
+        }
+        if (x_token == null) {
+            System.out.println("Ошибка: Задайте значение пременной X_TOKEN");
+            System.exit(1);
+        }
+        else {
+            System.out.println("X_TOKEN - прочитан");
+        }
+        if (x_username == null) {
+            System.out.println("Ошибка: Задайте значение пременной X_USERNAME");
+            System.exit(1);
+        } else {
+            System.out.println("X_USERNAME - прочитан");
         }
         System.out.println("--==END INITIALIZE==--");
     }
@@ -59,14 +73,20 @@ public class Bot {
                             if (text.toLowerCase().startsWith("gpt")) {
                                 telegram.sendMessage(chatId, "Адвокат когда ты уже сделаешь меня умным\\?");
                             }
+                            if (text.toLowerCase().startsWith("хуй")) {
+                                telegram.sendMessage(chatId, "трусы свои пожуй\\!");
+                            }
                             if (text.toLowerCase().contains("python")) {
                                 telegram.sendMessage(chatId, "Кому, что а ебуняке лишь бы питона душить");
+                            }
+                            if (text.toLowerCase().startsWith("red")) {
+                                telegram.sendMessage(chatId, "Рыжие ушли на покой, попробуй написать нюдсы");
                             }
                             if (text.toLowerCase().startsWith("нюдсы")) {
                                 telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
                             }
                         }
-                        Telegram.setLastUpdateId(updateId);
+                        telegram.setLastUpdateId(updateId);
                     }
 
                 }
@@ -75,7 +95,6 @@ public class Bot {
             }
         };
         //TODO добавить интеграцию с X
-        // Запуск задач
         scheduler.addTaskDaily(() -> telegram.sendMessage(chatID,"Утро, мешки с костями\\!"), 7, 0);
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
@@ -118,7 +137,7 @@ public class Bot {
                         telegram.sendPhoto(chatId, "https://pbs.twimg.com/media/GVjuLO-WwAAzjU_?format=jpg&name=large");
                     }
                 }
-                Telegram.setLastUpdateId(updateId);
+                telegram.setLastUpdateId(updateId);
             }
         }
     }

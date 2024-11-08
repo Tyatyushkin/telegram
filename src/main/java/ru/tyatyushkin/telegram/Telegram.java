@@ -21,9 +21,10 @@ public class Telegram {
         this.token = token;
     }
 
-    public static void setLastUpdateId(int updateId) {
+    public void setLastUpdateId(int updateId) {
         lastUpdateId = updateId;
     }
+
 
     public String getUpdates() {
         StringBuilder content = new StringBuilder();
@@ -111,4 +112,6 @@ public class Telegram {
             e.printStackTrace(System.out);
         }
     }
+
+
 }
