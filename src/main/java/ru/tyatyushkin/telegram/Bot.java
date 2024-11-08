@@ -39,10 +39,6 @@ public class Bot {
         Telegram telegram = new Telegram(token);
         Scheduler scheduler = new Scheduler();
 
-        Runnable morning = () -> {
-            System.out.println("morning");
-            telegram.sendMessage(chatID,"Утро, мешки с костями\\!");
-        };
         Runnable getUpdates = () -> {
             try {
                 String updates = telegram.getUpdates();
@@ -77,7 +73,9 @@ public class Bot {
         };
         //TODO добавить интеграцию с X
         // Запуск задач
-        scheduler.addTaskDaily(morning, 7, 0);
+        scheduler.addTaskDaily(() -> {
+            telegram.sendMessage(chatID,"Утро, мешки с костями\\!");
+        }, 7, 0);
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
