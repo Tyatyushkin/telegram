@@ -117,7 +117,7 @@ public class Bot {
             }, 0, 5, TimeUnit.SECONDS);
     }
 
-    public void processUpdates(String getUpdates, Telegram telegram) throws Exception {
+    public void processUpdates(String getUpdates, Telegram telegram){
         //Попробовать переписать на JSON
         if (getUpdates != null) {
             JSONObject json = new JSONObject(getUpdates);

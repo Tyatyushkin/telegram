@@ -105,7 +105,6 @@ public class Telegram {
 
     public void sendPostMessage(String json) {
         try {
-            // Создаём URL для метода sendMessage
             URL url = new URL(API_URL + token + "/sendMessage");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -144,7 +143,8 @@ public class Telegram {
         }
     }
 
-    public void sendInlineButton(String chatId) throws Exception {
+    public void sendInlineButton(String chatId) {
+        try {
         JSONObject message = new JSONObject();
         message.put("chat_id", chatId);
         message.put("text", "Привет! Нажми кнопку ниже:");
@@ -181,9 +181,12 @@ public class Telegram {
         JsonNode node = objectMapper.readTree(message.toString());
         System.out.println(node.toPrettyString());
         sendPostMessage(message.toString());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void sendReplyButton(String chatId) throws Exception{
+    public void sendReplyButton(String chatId) {
         JSONObject message = new JSONObject();
         message.put("chat_id", chatId);
         message.put("text", "test");
