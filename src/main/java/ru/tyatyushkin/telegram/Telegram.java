@@ -197,10 +197,13 @@ public class Telegram {
 
         JSONObject button = new JSONObject();
         JSONObject button1 = new JSONObject();
+        JSONObject button2 = new JSONObject();
         button.put("text", "test");
         button1.put("text", "boobs");
+        button2.put("text", "погода");
         row.put(button);
         row.put(button1);
+        row.put(button2);
 
 
         keyboard.put(row);

@@ -114,6 +114,7 @@ public class Bot {
         initialize();
         // Подключаем бота
         Telegram telegram = new Telegram(token);
+        // Подключаем модуль с погодой
         Weather weather = new Weather(w_token);
         weath = weather.getWeather();
         // Создаем новый планировщик
