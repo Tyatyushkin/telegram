@@ -2,7 +2,7 @@ package ru.tyatyushkin.telegram;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         boolean test_mode = Boolean.parseBoolean(System.getenv("TEST_MODE"));
         String app_token = System.getenv("TG_TOKEN");
 

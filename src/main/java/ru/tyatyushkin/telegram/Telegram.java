@@ -144,7 +144,7 @@ public class Telegram {
         }
     }
 
-    public void sendInlineButton(String chatId) throws JsonProcessingException {
+    public void sendInlineButton(String chatId) throws Exception {
         JSONObject message = new JSONObject();
         message.put("chat_id", chatId);
         message.put("text", "Привет! Нажми кнопку ниже:");
@@ -180,6 +180,29 @@ public class Telegram {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode node = objectMapper.readTree(message.toString());
         System.out.println(node.toPrettyString());
+        sendPostMessage(message.toString());
+    }
+
+    public void sendReplyButton(String chatId) throws Exception{
+        JSONObject message = new JSONObject();
+        message.put("chat_id", chatId);
+        message.put("text", "test");
+
+        JSONObject replyMarkup = new JSONObject();
+        JSONArray keyboard = new JSONArray();
+        JSONArray row = new JSONArray();
+
+        JSONObject button = new JSONObject();
+        button.put("text", "test");
+        row.put(button);
+
+        keyboard.put(row);
+        replyMarkup.put("keyboard", keyboard);
+        replyMarkup.put("resize_keyboard", true);
+        replyMarkup.put("one_time_keyboard", true);
+
+        message.put("reply_markup", replyMarkup);
+
         sendPostMessage(message.toString());
     }
 

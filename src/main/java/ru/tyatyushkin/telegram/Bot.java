@@ -100,7 +100,7 @@ public class Bot {
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
-    public void createTestBot() {
+    public void createTestBot() throws Exception {
         // Инициализация и проверка переменных
         initialize();
         // Подключаем бота
@@ -111,13 +111,13 @@ public class Bot {
         scheduler.addTaskAtFixedRate(() -> {
             try {
                 processUpdates(telegram.getUpdates(), telegram);
-                } catch (JsonProcessingException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }, 0, 5, TimeUnit.SECONDS);
     }
 
-    public void processUpdates(String getUpdates, Telegram telegram) throws JsonProcessingException {
+    public void processUpdates(String getUpdates, Telegram telegram) throws Exception {
         //Попробовать переписать на JSON
         if (getUpdates != null) {
             JSONObject json = new JSONObject(getUpdates);
@@ -139,6 +139,11 @@ public class Bot {
                             }
                             if (text.equals("/test")) {
                                 telegram.sendInlineButton(ch);
+                            }
+                            if (text.equals("/menu")) {
+                                telegram.sendReplyButton(ch);
+                            } else if (text.equals("test")) {
+                                telegram.sendMessage(ch, "Проверка reply button");
                             }
                         }
                     } else if (updates.has("callback_query")) {
