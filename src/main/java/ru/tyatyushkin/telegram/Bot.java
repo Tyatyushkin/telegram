@@ -143,6 +143,8 @@ public class Bot {
                                 telegram.sendReplyButton(ch);
                             } else if (text.equals("test")) {
                                 telegram.sendMessage(ch, "Проверка reply button");
+                            } else if (text.equals("boobs")) {
+                                
                             }
                         }
                     } else if (updates.has("callback_query")) {
