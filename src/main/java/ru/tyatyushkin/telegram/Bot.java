@@ -119,6 +119,7 @@ public class Bot {
         weath = weather.getWeather();
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
+        scheduler.addTaskAtFixedRate(() -> weath = weather.getWeather(), 0, 3, TimeUnit.HOURS );
         scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, "Пиздуйте спать, жалкие людишки"), 20, 0);
         scheduler.addTaskAtFixedRate(() -> {
             try {
