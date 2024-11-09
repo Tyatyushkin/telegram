@@ -100,7 +100,7 @@ public class Bot {
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
-    public void createTestBot() throws Exception {
+    public void createTestBot() {
         // Инициализация и проверка переменных
         initialize();
         // Подключаем бота
