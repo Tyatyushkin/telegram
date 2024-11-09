@@ -116,7 +116,6 @@ public class Bot {
         Telegram telegram = new Telegram(token);
         // Подключаем модуль с погодой
         Weather weather = new Weather(w_token);
-        weath = weather.getWeather();
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
         scheduler.addTaskAtFixedRate(() -> weath = weather.getWeather(), 0, 3, TimeUnit.HOURS );
