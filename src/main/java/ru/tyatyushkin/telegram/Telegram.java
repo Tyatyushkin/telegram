@@ -182,7 +182,7 @@ public class Telegram {
         System.out.println(node.toPrettyString());
         sendPostMessage(message.toString());
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(System.out);
         }
     }
 

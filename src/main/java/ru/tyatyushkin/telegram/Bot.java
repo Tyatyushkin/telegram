@@ -182,7 +182,7 @@ public class Bot {
                     telegram.setLastUpdateId(updateId);
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace(System.out);
             }
         }
     }
