@@ -208,6 +208,4 @@ public class Telegram {
 
         sendPostMessage(message.toString());
     }
-
-
 }
