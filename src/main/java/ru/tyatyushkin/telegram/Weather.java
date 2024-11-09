@@ -6,9 +6,38 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Weather {
     private static String token;
+
+    private static final Map<String, String> conditionTranslations = new HashMap<>();
+
+    static {
+        // Инициализируем карту переводов
+        conditionTranslations.put("clear", "Ясно");
+        conditionTranslations.put("partly-cloudy", "Малооблачно");
+        conditionTranslations.put("cloudy", "Облачно с прояснениями");
+        conditionTranslations.put("overcast", "Пасмурно");
+        conditionTranslations.put("drizzle", "Морось");
+        conditionTranslations.put("light-rain", "Небольшой дождь");
+        conditionTranslations.put("rain", "Дождь");
+        conditionTranslations.put("heavy-rain", "Сильный дождь");
+        conditionTranslations.put("showers", "Ливень");
+        conditionTranslations.put("wet-snow", "Дождь со снегом");
+        conditionTranslations.put("light-snow", "Небольшой снег");
+        conditionTranslations.put("snow", "Снег");
+        conditionTranslations.put("snow-showers", "Снегопад");
+        conditionTranslations.put("hail", "Град");
+        conditionTranslations.put("thunderstorm", "Гроза");
+        conditionTranslations.put("thunderstorm-with-rain", "Дождь с грозой");
+        conditionTranslations.put("thunderstorm-with-hail", "Гроза с градом");
+    }
+
+    private static String translateCondition(String condition) {
+        return conditionTranslations.getOrDefault(condition, "Неизвестное состояние");
+    }
 
     public Weather(String w_token) {
         this.token = w_token;
@@ -42,10 +71,11 @@ public class Weather {
 
             double temp = fact.getDouble("temp");
             String condition = fact.getString("condition");
+            String translateCondition = translateCondition(condition);
             double windSpeed = fact.getDouble("wind_speed");
 
             String weather = "DEMO режим погоды от Yandex, работает 7 дней\n Температура в Магнитогорске: " + temp
-                    + ", скорость ветра: " + windSpeed + ", Состояние: " + condition;
+                    + ", скорость ветра: " + windSpeed + ", Состояние: " + translateCondition;
             return weather;
         } catch (Exception e) {
             e.printStackTrace(System.out);
