@@ -136,10 +136,10 @@ public class Bot {
                             if (text.startsWith("json")) {
                                 telegram.sendMessage(ch,"тест новой обработки сообщений");
                             }
-                            if (text.equals("/test")) {
+                            if (text.startsWith("/test")) {
                                 telegram.sendInlineButton(ch);
                             }
-                            if (text.equals("/menu")) {
+                            if (text.startsWith("/menu")) {
                                 telegram.sendReplyButton(ch);
                             } else if (text.equals("test")) {
                                 telegram.sendMessage(ch, "Проверка reply button");
