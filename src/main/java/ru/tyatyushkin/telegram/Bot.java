@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class Bot {
     private final String token;
     private String chatID;
+    private String weath;
+    private String w_token;
 
     public Bot(String token) {
         this.token = token;
@@ -22,6 +24,7 @@ public class Bot {
         String chatId = System.getenv("CHAT_ID");
         String x_token = System.getenv("X_TOKEN");
         String x_username = System.getenv("X_USERNAME");
+        String w_token = System.getenv("W_TOKEN");
         if (app_token == null) {
             System.out.println("Ошибка: Задайте значение переменной TG_TOKEN");
             System.exit(1);
@@ -47,6 +50,13 @@ public class Bot {
             System.exit(1);
         } else {
             System.out.println("X_USERNAME - прочитан");
+        }
+        if (w_token == null) {
+            System.out.println("Ошибка: Задайте значение переменной W_TOKEN");
+            System.exit(1);
+        } else {
+            System.out.println("W_TOKEN - прочитан");
+            this.w_token = w_token;
         }
         System.out.println("--==END INITIALIZE==--");
     }
@@ -104,6 +114,8 @@ public class Bot {
         initialize();
         // Подключаем бота
         Telegram telegram = new Telegram(token);
+        Weather weather = new Weather(w_token);
+        weath = weather.getWeather();
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
         scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, "Пиздуйте спать, жалкие людишки"), 20, 0);
@@ -145,6 +157,8 @@ public class Bot {
                                 telegram.sendMessage(ch, "Проверка reply button");
                             } else if (text.equals("boobs")) {
                                 telegram.sendPhoto(ch,"https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg" );
+                            } else if (text.equals("погода")) {
+                                telegram.sendMessage(ch, weath );
                             }
                         }
                     } else if (updates.has("callback_query")) {

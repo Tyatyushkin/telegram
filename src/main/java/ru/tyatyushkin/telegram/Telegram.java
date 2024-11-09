@@ -67,7 +67,7 @@ public class Telegram {
             jsonObject.put("chat_id", chatId);
             jsonObject.put("text", message);
             jsonObject.put("disable_notification", "TRUE");
-            jsonObject.put("parse_mode", "MarkdownV2");
+            //jsonObject.put("parse_mode", "MarkdownV2");
 
             // Show JSON
             ObjectMapper objectMapper = new ObjectMapper();
