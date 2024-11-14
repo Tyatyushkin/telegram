@@ -1,13 +1,18 @@
 package ru.tyatyushkin.telegram;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class Main {
+    private static final Logger logger = LogManager.getLogger(Main.class);
+
     public static void main(String[] args)  {
         boolean test_mode = Boolean.parseBoolean(System.getenv("TEST_MODE"));
         String app_token = System.getenv("TG_TOKEN");
 
         if (app_token == null) {
-            System.out.println("Переменная окружения TG_TOKEN не задана!");
+            logger.error("Ошибка: Переменная окружения TG_TOKEN не задана!");
             System.exit(1);
         }
 
