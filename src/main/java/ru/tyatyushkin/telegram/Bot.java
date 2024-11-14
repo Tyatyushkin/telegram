@@ -19,46 +19,46 @@ public class Bot {
     }
 
     public void initialize() {
-        System.out.println("--==START INITIALIZE==--");
+        LoggerConfig.logger.info("--==START VARS INITIALIZE==--");
         String app_token = System.getenv("TG_TOKEN");
         String chatId = System.getenv("CHAT_ID");
         String x_token = System.getenv("X_TOKEN");
         String x_username = System.getenv("X_USERNAME");
         String w_token = System.getenv("W_TOKEN");
         if (app_token == null) {
-            System.out.println("Ошибка: Задайте значение переменной TG_TOKEN");
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной TG_TOKEN");
             System.exit(1);
         } else {
-            System.out.println("TG_TOKEN - прочитан");
+            LoggerConfig.logger.info("TG_TOKEN - прочитан");
         }
         if (chatId == null) {
-            System.out.println("Ошибка: Задайте значение переменной CHAT_ID");
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной CHAT_ID");
             System.exit(1);
         } else {
-            System.out.println("CHAT_ID - прочитан");
+            LoggerConfig.logger.info("CHAT_ID - прочитан");
             this.chatID = chatId;
         }
         if (x_token == null) {
-            System.out.println("Ошибка: Задайте значение переменной X_TOKEN");
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной X_TOKEN");
             System.exit(1);
         }
         else {
-            System.out.println("X_TOKEN - прочитан");
+            LoggerConfig.logger.info("X_TOKEN - прочитан");
         }
         if (x_username == null) {
-            System.out.println("Ошибка: Задайте значение переменной X_USERNAME");
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной X_USERNAME");
             System.exit(1);
         } else {
-            System.out.println("X_USERNAME - прочитан");
+            LoggerConfig.logger.info("X_USERNAME - прочитан");
         }
         if (w_token == null) {
-            System.out.println("Ошибка: Задайте значение переменной W_TOKEN");
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной W_TOKEN");
             System.exit(1);
         } else {
-            System.out.println("W_TOKEN - прочитан");
+            LoggerConfig.logger.info("W_TOKEN - прочитан");
             this.w_token = w_token;
         }
-        System.out.println("--==END INITIALIZE==--");
+        LoggerConfig.logger.info("--==END INITIALIZE==--");
     }
 
     public void createBot() {
