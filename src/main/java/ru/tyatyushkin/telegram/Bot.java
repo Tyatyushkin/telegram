@@ -134,19 +134,18 @@ public class Bot {
         if(message != null && message.get("text") != null) {
             String text = message.get("text").asText();
             String chatId = message.get("chat").get("id").asText();
-
             if (text.toLowerCase().contains("сиськи")) {
                 telegram.sendPhoto(chatId, "https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg");
             }
-
             if (text.toLowerCase().contains("тест")) {
                 telegram.sendMessage(chatId, "Что мудила криворукая ничего с первого раза сделать не можешь?");
             }
-
             if (text.toLowerCase().startsWith("ref")) {
                 telegram.sendMessage(chatId, "Проверка рефакторинга прошла успешно");
             }
-
+            if (text.toLowerCase().contains("адвокат")) {
+                telegram.sendMessage(chatId, "Адвокат - всегда пиву рад!");
+            }
         }
     }
 
