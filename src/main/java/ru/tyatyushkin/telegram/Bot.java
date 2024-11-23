@@ -13,9 +13,11 @@ public class Bot {
     private String chatID;
     private String weath;
     private String w_token;
+    private Telegram telegram;
 
     public Bot(String token) {
         this.token = token;
+        this.telegram = new Telegram(this.token);
     }
 
     public void initialize() {
@@ -61,9 +63,10 @@ public class Bot {
         LoggerConfig.logger.info("--==END INITIALIZE==--");
     }
 
+
+
     public void createBot() {
         initialize();
-        Telegram telegram = new Telegram(token);
         Scheduler scheduler = new Scheduler();
 
         Runnable getUpdates = () -> {
@@ -112,8 +115,6 @@ public class Bot {
     public void createTestBot() {
         // Инициализация и проверка переменных
         initialize();
-        // Подключаем бота
-        Telegram telegram = new Telegram(token);
         // Подключаем модуль с погодой
         Weather weather = new Weather(w_token);
         // Создаем новый планировщик
@@ -127,6 +128,26 @@ public class Bot {
                     throw new RuntimeException(e);
                 }
             }, 0, 5, TimeUnit.SECONDS);
+    }
+
+    public void answerMessages(JsonNode message) {
+        if(message != null && message.get("text") != null) {
+            String text = message.get("test").asText();
+            String chatId = message.get("chat").get("id").asText();
+
+            if (text.toLowerCase().contains("сиськи")) {
+                telegram.sendPhoto(chatId, "https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg");
+            }
+
+            if (text.toLowerCase().contains("тест")) {
+                telegram.sendMessage(chatId, "Что мудила криворукая ничего с первого раза сделать не можешь?");
+            }
+
+            if (text.toLowerCase().startsWith("ref")) {
+                telegram.sendMessage(chatId, "Проверка рефакторинга прошла успешно");
+            }
+
+        }
     }
 
     public void processUpdates(String getUpdates, Telegram telegram){
@@ -185,17 +206,7 @@ public class Bot {
                 for (JsonNode update : resultArray) {
                     int updateId = update.get("update_id").asInt();
                     JsonNode messageNode = update.get("message");
-                    if (messageNode != null && messageNode.get("text") != null) {
-                        String text = messageNode.get("text").asText();
-                        String chatId = messageNode.get("chat").get("id").asText();
-
-                        if (text.toLowerCase().contains("тест")) {
-                            telegram.sendMessage(chatId, "Что мудила криворукая ничего с первого раза сделать не можешь\\?");
-                        }
-                        if (text.toLowerCase().contains("сиськи")) {
-                            telegram.sendPhoto(chatId, "https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg");
-                        }
-                    }
+                    answerMessages(messageNode);
                     telegram.setLastUpdateId(updateId);
                 }
             } catch (Exception e) {
