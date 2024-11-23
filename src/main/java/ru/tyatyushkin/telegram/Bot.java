@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class Bot {
     private final String token;
     private String chatID;
-    private String weath;
     private String w_token;
+    private String y_token;
     private Telegram telegram;
 
     public Bot(String token) {
@@ -27,6 +27,7 @@ public class Bot {
         String x_token = System.getenv("X_TOKEN");
         String x_username = System.getenv("X_USERNAME");
         String w_token = System.getenv("W_TOKEN");
+        String y_token = System.getenv("Y_TOKEN");
         if (app_token == null) {
             LoggerConfig.logger.error("Ошибка: Задайте значение переменной TG_TOKEN");
             System.exit(1);
@@ -59,6 +60,13 @@ public class Bot {
         } else {
             LoggerConfig.logger.info("W_TOKEN - прочитан");
             this.w_token = w_token;
+        }
+        if (y_token == null) {
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной Y_TOKEN");
+            System.exit(1);
+        } else {
+            LoggerConfig.logger.info("Y_TOKEN - прочитан");
+            this.y_token = y_token;
         }
         LoggerConfig.logger.info("--==END INITIALIZE==--");
     }
