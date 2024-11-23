@@ -81,10 +81,10 @@ public class Bot {
                             String chatId = messageNode.get("chat").get("id").asText();
 
                             if (text.toLowerCase().startsWith("gpt")) {
-                                telegram.sendMessage(chatId, "Адвокат когда ты уже сделаешь меня умным\\?");
+                                telegram.sendMessage(chatId, "Адвокат когда ты уже сделаешь меня умным?");
                             }
                             if (text.toLowerCase().startsWith("хуй")) {
-                                telegram.sendMessage(chatId, "трусы свои пожуй\\!");
+                                telegram.sendMessage(chatId, "трусы свои пожуй!");
                             }
                             if (text.toLowerCase().contains("python")) {
                                 telegram.sendMessage(chatId, "Кому, что а ебуняке лишь бы питона душить");
@@ -105,7 +105,7 @@ public class Bot {
             }
         };
         //TODO добавить интеграцию с X
-        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID,"Утро, мешки с костями\\!"), 7, 0);
+        scheduler.addTaskDaily(() -> telegram.sendMessage(chatID,"Утро, мешки с костями!"), 7, 0);
         scheduler.addTaskAtFixedRate(getUpdates, 0, 5, TimeUnit.SECONDS);
     }
 
@@ -171,7 +171,7 @@ public class Bot {
                             telegram.sendMessage(ch, "Я бот для тестирования");
                         }
                         if (callbackData.equals("vpn")) {
-                            telegram.sendMessage(ch, "Если хотите приобрести VPN, обращайтесь к \\@mplane");
+                            telegram.sendMessage(ch, "Если хотите приобрести VPN, обращайтесь к @mplane");
                         }
                         
                     }
