@@ -115,11 +115,8 @@ public class Bot {
     public void createTestBot() {
         // Инициализация и проверка переменных
         initialize();
-        // Подключаем модуль с погодой
-        Weather weather = new Weather(w_token);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
-        scheduler.addTaskAtFixedRate(() -> weath = weather.getWeather(), 0, 3, TimeUnit.HOURS );
         scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, "Пиздуйте спать, жалкие людишки"), 20, 0);
         scheduler.addTaskAtFixedRate(() -> {
             try {
@@ -178,8 +175,6 @@ public class Bot {
                                 telegram.sendMessage(ch, "Проверка reply button");
                             } else if (text.equals("boobs")) {
                                 telegram.sendPhoto(ch,"https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg" );
-                            } else if (text.equals("погода")) {
-                                telegram.sendMessage(ch, weath );
                             }
                         }
                     } else if (updates.has("callback_query")) {
