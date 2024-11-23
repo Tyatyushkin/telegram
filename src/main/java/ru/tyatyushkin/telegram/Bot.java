@@ -13,6 +13,7 @@ public class Bot {
     private String chatID;
     private String w_token;
     private String y_token;
+    private String channelId;
     private Telegram telegram;
 
     public Bot(String token) {
@@ -28,6 +29,7 @@ public class Bot {
         String x_username = System.getenv("X_USERNAME");
         String w_token = System.getenv("W_TOKEN");
         String y_token = System.getenv("Y_TOKEN");
+        String channelId = System.getenv("CHANNEL_ID");
         if (app_token == null) {
             LoggerConfig.logger.error("Ошибка: Задайте значение переменной TG_TOKEN");
             System.exit(1);
@@ -67,6 +69,13 @@ public class Bot {
         } else {
             LoggerConfig.logger.info("Y_TOKEN - прочитан");
             this.y_token = y_token;
+        }
+        if (channelId == null) {
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной CHANNEL_ID");
+            System.exit(1);
+        } else {
+            LoggerConfig.logger.info("CHANNEL_ID - прочитан");
+            this.channelId = channelId;
         }
         LoggerConfig.logger.info("--==END INITIALIZE==--");
     }
@@ -125,6 +134,7 @@ public class Bot {
         initialize();
         // Включем интеграцию с youtube
         Youtube youtube = new Youtube(y_token);
+        youtube.lastVideo(channelId);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
         scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, "Пиздуйте спать, жалкие людишки"), 20, 0);

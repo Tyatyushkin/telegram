@@ -5,7 +5,6 @@ import java.net.URL;
 
 public class Youtube {
     private final String token;
-    private static final String API_KEY = "YOUR_API_KEY";
     private static final String CHANNEL_ID = "YOUR_CHANNEL_ID";
 
     public Youtube(String token){
