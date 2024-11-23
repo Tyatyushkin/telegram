@@ -4,7 +4,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Youtube {
-    private final String token;;
+    private final String token;
 
     public Youtube(String token){
         this.token = token;
