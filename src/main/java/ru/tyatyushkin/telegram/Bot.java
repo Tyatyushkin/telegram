@@ -132,7 +132,7 @@ public class Bot {
 
     public void answerMessages(JsonNode message) {
         if(message != null && message.get("text") != null) {
-            String text = message.get("test").asText();
+            String text = message.get("text").asText();
             String chatId = message.get("chat").get("id").asText();
 
             if (text.toLowerCase().contains("сиськи")) {
