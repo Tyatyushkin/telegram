@@ -16,6 +16,8 @@ public class Bot {
     private String channelId;
     private final Telegram telegram;
 
+    Weather weather;
+
     public Bot(String token) {
         this.token = token;
         this.telegram = new Telegram(this.token);
@@ -134,6 +136,7 @@ public class Bot {
         initialize();
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
+        weather = new Weather(token);
         // Включем интеграцию с youtube
         Youtube youtube = new Youtube(y_token);
         scheduler.addTaskAtFixedRate(() -> {
@@ -169,6 +172,9 @@ public class Bot {
             }
             if (text.toLowerCase().contains("адвокат")) {
                 telegram.sendMessage(chatId, "Адвокат - всегда пиву рад!");
+            }
+            if (text.toLowerCase().contains("погода")) {
+                telegram.sendMessage(chatId, weather.getWeather());
             }
         }
     }
