@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Comparator;
+import java.util.stream.StreamSupport;
 
 public class Youtube {
     private final String token;
@@ -40,22 +42,26 @@ public class Youtube {
             JsonNode items = jsonResponse.get("items");
 
             if (items != null && items.isArray() && !items.isEmpty()) {
-                JsonNode latestVideo = items.get(items.size() - 1);
-                JsonNode snippet = latestVideo.get("snippet");
-                String videoId = latestVideo.get("id").get("videoId").asText();
-                String title = snippet.get("title").asText();
+                JsonNode latestVideo = StreamSupport.stream(items.spliterator(), false)
+                        .max(Comparator.comparing(item -> item.get("snippet").get("publishedAt").asText()))
+                        .orElse(null);
+                if (latestVideo != null) {
+                    JsonNode snippet = latestVideo.get("snippet");
+                    String videoId = latestVideo.get("id").get("videoId").asText();
+                    String title = snippet.get("title").asText();
 
-                if (lastVideoID == null || !lastVideoID.equals(videoId)) {
-                    lastVideoID = videoId;
+                    if (lastVideoID == null || !lastVideoID.equals(videoId)) {
+                        lastVideoID = videoId;
 
-                    // Печать информации о последнем видео
-                    System.out.println("Новое видео обнаружено:");
-                    System.out.println("Название последнего видео: " + title);
-                    System.out.println("ID видео: " + videoId);
-                    System.out.println("URL видео: https://www.youtube.com/watch?v=" + videoId);
-                    return "https://www.youtube.com/watch?v=" + videoId;
-                } else {
-                    System.out.println("Нет новых видео.");
+                        // Печать информации о последнем видео
+                        System.out.println("Новое видео обнаружено:");
+                        System.out.println("Название последнего видео: " + title);
+                        System.out.println("ID видео: " + videoId);
+                        System.out.println("URL видео: https://www.youtube.com/watch?v=" + videoId);
+                        return "https://www.youtube.com/watch?v=" + videoId;
+                    } else {
+                        System.out.println("Нет новых видео.");
+                    }
                 }
             }
         } catch (Exception e) {
