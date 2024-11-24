@@ -136,7 +136,7 @@ public class Bot {
         initialize();
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
-        weather = new Weather(token);
+        weather = new Weather(w_token);
         // Включем интеграцию с youtube
         Youtube youtube = new Youtube(y_token);
         scheduler.addTaskAtFixedRate(() -> {
