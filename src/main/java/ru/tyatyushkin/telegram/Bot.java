@@ -14,7 +14,7 @@ public class Bot {
     private String w_token;
     private String y_token;
     private String channelId;
-    private Telegram telegram;
+    private final Telegram telegram;
 
     public Bot(String token) {
         this.token = token;
