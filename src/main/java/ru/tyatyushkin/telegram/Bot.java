@@ -132,11 +132,18 @@ public class Bot {
     public void createTestBot() {
         // Инициализация и проверка переменных
         initialize();
-        // Включем интеграцию с youtube
-        Youtube youtube = new Youtube(y_token);
-        youtube.lastVideo(channelId);
         // Создаем новый планировщик
         Scheduler scheduler = new Scheduler();
+        // Включем интеграцию с youtube
+        Youtube youtube = new Youtube(y_token);
+        scheduler.addTaskAtFixedRate(() -> {
+            String newVideo = youtube.lastVideo(channelId);
+            if (newVideo != null) {
+                telegram.sendMessage(chatID, "Новое видео от Каца: " + newVideo);
+            }
+        }, 0, 3, TimeUnit.HOURS);
+
+
         scheduler.addTaskDaily(() -> telegram.sendMessage(chatID, "Пиздуйте спать, жалкие людишки"), 20, 0);
         scheduler.addTaskAtFixedRate(() -> {
             try {
