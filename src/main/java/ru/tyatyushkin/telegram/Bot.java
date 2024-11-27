@@ -157,6 +157,10 @@ public class Bot {
             }, 0, 5, TimeUnit.SECONDS);
     }
 
+    public void createAlphaBot() {
+        initialize();
+    }
+
     public void answerMessages(JsonNode message) {
         if(message != null && message.get("text") != null) {
             String text = message.get("text").asText();
