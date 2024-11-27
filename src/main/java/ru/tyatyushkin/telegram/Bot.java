@@ -9,12 +9,17 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Bot {
+    private static String init;
     private final String token;
     private String chatID;
     private String w_token;
     private String y_token;
     private String channelId;
     private final Telegram telegram;
+
+    public static void setInit(String init) {
+        Bot.init = init;
+    }
 
     Weather weather;
 
@@ -159,7 +164,20 @@ public class Bot {
 
     public void createAlphaBot() {
         initialize();
+        Utils.init();
+        System.out.println(init);
+        Scheduler scheduler = new Scheduler();
+        scheduler.addTaskAtFixedRate(() -> {
+            try {
+                String messages = telegram.getUpdates();
+
+            } catch (Exception e) {
+                LoggerConfig.logger.error("Ошибке: ", e);
+            }
+
+        },0, 5, TimeUnit.SECONDS);
     }
+
 
     public void answerMessages(JsonNode message) {
         if(message != null && message.get("text") != null) {
