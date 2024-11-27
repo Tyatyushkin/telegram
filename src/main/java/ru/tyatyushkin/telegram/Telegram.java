@@ -1,6 +1,8 @@
 package ru.tyatyushkin.telegram;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -184,6 +186,30 @@ public class Telegram {
         } catch (JsonProcessingException e) {
             e.printStackTrace(System.out);
         }
+    }
+
+    public void inlineButton(String chatId) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            //Создаем кнопку
+            ObjectNode linkButton = objectMapper.createObjectNode();
+            linkButton.put("text", "Перейти на tyatyushkin.ru");
+            linkButton.put("url", "https://tyatyushkin.ru");
+            // Создаем строку для кнопок
+            ArrayNode buttonNode = objectMapper.createArrayNode();
+            buttonNode.add(linkButton);
+            // Создаем массив для кнопок
+            ArrayNode inlineKeyboardArray = objectMapper.createArrayNode();
+            inlineKeyboardArray.add(buttonNode);
+            // Создаем корневой узел JSON - InlineKeyboardMarkup
+            ObjectNode inlineKeyboardMarkup = objectMapper.createObjectNode();
+            inlineKeyboardMarkup.set("inline_keyboard",inlineKeyboardArray);
+
+            System.out.println(inlineKeyboardMarkup.toPrettyString());
+        } catch (Exception e) {
+            LoggerConfig.logger.error("Ошибка: {}", String.valueOf(e));
+        }
+
     }
 
     public void sendReplyButton(String chatId) {
