@@ -7,6 +7,7 @@ public class Main {
         LoggerConfig.initialize();
 
         boolean test_mode = Boolean.parseBoolean(System.getenv("TEST_MODE"));
+        boolean alpha_mode = Boolean.parseBoolean(System.getenv("ALPHA_MODE"));
         String app_token = System.getenv("TG_TOKEN");
 
         if (app_token == null) {
@@ -15,8 +16,13 @@ public class Main {
         }
 
         if (test_mode) {
-            Bot test = new Bot(app_token);
-            test.createTestBot();
+            if (alpha_mode) {
+                Bot alpha = new Bot(app_token);
+                alpha.createTestBot();
+            } else {
+                Bot test = new Bot(app_token);
+                test.createTestBot();
+            }
         } else {
            Bot telegram = new Bot(app_token);
            telegram.createBot();
