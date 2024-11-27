@@ -18,7 +18,7 @@ public class Main {
         if (test_mode) {
             if (alpha_mode) {
                 Bot alpha = new Bot(app_token);
-                alpha.createTestBot();
+                alpha.createBot();
             } else {
                 Bot test = new Bot(app_token);
                 test.createTestBot();
