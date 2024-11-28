@@ -170,7 +170,7 @@ public class Bot {
         scheduler.addTaskAtFixedRate(() -> {
             try {
                 String messages = telegram.getUpdates();
-
+                System.out.println(Utils.testParse(messages));
             } catch (Exception e) {
                 LoggerConfig.logger.error("Ошибке: ", e);
             }
