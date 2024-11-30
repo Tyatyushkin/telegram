@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   telegram:
-    image: tyatyushkin/telegram:${VERSION}
+    image: tyatyushkin/telegram:${VERSION}-beta
+    container_name: telegram-beta
     environment:
       - TG_TOKEN=${TG_TOKEN}
       - X_TOKEN=${X_TOKEN}
@@ -12,3 +13,4 @@ services:
       - CHANNEL_ID=${CHANNEL_ID}
       - TEST_MODE=${TEST_MODE}
       - W_TOKEN=${W_TOKEN
+    restart: always
