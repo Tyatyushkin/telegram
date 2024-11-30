@@ -13,4 +13,6 @@ services:
       - CHANNEL_ID=${CHANNEL_ID}
       - TEST_MODE=${TEST_MODE}
       - W_TOKEN=${W_TOKEN
+    volumes:
+      - "/opt/telegram:/opt/telegram"
     restart: always
