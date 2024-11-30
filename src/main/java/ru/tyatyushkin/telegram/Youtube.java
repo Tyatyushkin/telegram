@@ -3,15 +3,17 @@ package ru.tyatyushkin.telegram;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 public class Youtube {
     private final String token;
+    private static final String FILE_PATH = "/opt/telegram/lastVideoID.txt";
     private static String lastVideoID = null;
 
     public Youtube(String token) {
@@ -50,7 +52,19 @@ public class Youtube {
                     String videoId = latestVideo.get("id").get("videoId").asText();
                     String title = snippet.get("title").asText();
 
-                    if (lastVideoID == null || !lastVideoID.equals(videoId)) {
+                    // Check if the videoId is already in the file
+                    Set<String> videoIds = new HashSet<>();
+                    try (BufferedReader fileReader = new BufferedReader(new FileReader(FILE_PATH))) {
+                        String line;
+                        while ((line = fileReader.readLine()) != null) {
+                            videoIds.add(line.trim());
+                        }
+                    }
+
+                    if (lastVideoID == null || !lastVideoID.equals(videoId) || !videoIds.contains(videoId)) {
+                        try(PrintWriter out = new PrintWriter(new FileWriter(FILE_PATH, true))) {
+                            out.println(videoId);
+                        }
                         lastVideoID = videoId;
 
                         // Печать информации о последнем видео
