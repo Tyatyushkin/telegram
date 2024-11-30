@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 
@@ -30,6 +34,22 @@ public class Bot {
 
     public void initialize() {
         LoggerConfig.logger.info("--==START VARS INITIALIZE==--");
+
+        // Check and create /opt/telegram directory if id does not exist
+        Path telegramDir = Paths.get("/opt/telegram");
+        if (!Files.exists(telegramDir)) {
+            try {
+                Files.createDirectories(telegramDir);
+                LoggerConfig.logger.info("/opt/telegram directory created.");
+            } catch (IOException e) {
+                LoggerConfig.logger.error("Failed to create /opt/telegram directory: ", e);
+                System.exit(1);
+            }
+        } else {
+            LoggerConfig.logger.info("/opt/telegram directory already exists.");
+        }
+
+        // Init Vars
         String app_token = System.getenv("TG_TOKEN");
         String chatId = System.getenv("CHAT_ID");
         String x_token = System.getenv("X_TOKEN");
