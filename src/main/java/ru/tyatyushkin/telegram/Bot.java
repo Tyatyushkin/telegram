@@ -107,8 +107,6 @@ public class Bot {
         LoggerConfig.logger.info("--==END INITIALIZE==--");
     }
 
-
-
     public void createBot() {
         initialize();
         Scheduler scheduler = new Scheduler();
@@ -190,6 +188,19 @@ public class Bot {
         scheduler.addTaskAtFixedRate(() -> {
             try {
                 String messages = telegram.getUpdates();
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(messages);
+                JsonNode resultArray = rootNode.get("result");
+
+                if (resultArray != null && resultArray.isArray()) {
+                    for (JsonNode update : resultArray) {
+                        int updateId = update.get("update_id").asInt();
+                        JsonNode channelPost = update.get("channel_post");
+                        telegram.setLastUpdateId(updateId);
+                        System.out.println(channelPost.toPrettyString());
+                    }
+                }
                 System.out.println(Utils.testParse(messages));
             } catch (Exception e) {
                 LoggerConfig.logger.error("Ошибке: ", e);
