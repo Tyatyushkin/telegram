@@ -34,15 +34,11 @@ public class JSON {
     private static void testAnswer(ArrayNode test) {
         for (JsonNode jsonNode : test) {
             String text = jsonNode.get("text").asText();
-            //String chatId = jsonNode.get("chat").get("id").asText();
+            String chatId = jsonNode.get("chat").get("id").asText();
             if (text.equalsIgnoreCase("hello")) {
-                System.out.println("test message");
+                Telegram.getSendMessage(chatId, "how are you?");
             }
         }
-    }
-
-    private static boolean checkGetMessages() {
-        return false;
     }
 
     private static boolean checkResult(JsonNode resultArray) {
