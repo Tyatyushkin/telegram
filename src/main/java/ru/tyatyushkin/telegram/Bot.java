@@ -34,21 +34,7 @@ public class Bot {
 
     public void initialize() {
         LoggerConfig.logger.info("--==START VARS INITIALIZE==--");
-
         // Check and create /opt/telegram directory if id does not exist
-        Path telegramDir = Paths.get("/opt/telegram");
-        if (!Files.exists(telegramDir)) {
-            try {
-                Files.createDirectories(telegramDir);
-                LoggerConfig.logger.info("/opt/telegram directory created.");
-            } catch (IOException e) {
-                LoggerConfig.logger.error("Failed to create /opt/telegram directory: ", e);
-                System.exit(1);
-            }
-        } else {
-            LoggerConfig.logger.info("/opt/telegram directory already exists.");
-        }
-
         Utils.checkTelegramDir();
         // Init Vars
         String app_token = System.getenv("TG_TOKEN");
