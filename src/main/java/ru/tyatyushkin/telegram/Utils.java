@@ -9,9 +9,33 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Utils {
+
+    private static String readTelegramToken() {
+        return System.getenv("TG_TOKEN");
+    }
+
+    private static String readYouTubeToken() {
+        return System.getenv("Y_TOKEN");
+    }
+
+
+    public static void checkTelegramToken() {
+        if (readTelegramToken() == null) {
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной TG_TOKEN");
+            System.exit(1);
+        }
+    }
+
+    private static void checkYouTubeToken() {
+        if (readYouTubeToken() == null) {
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной Y_TOKEN");
+            System.exit(1);
+        }
+    }
+
     public static void init () {
-        String init = "hello, max!";
-        Bot.setInit(init);
+        checkTelegramToken();
+        checkYouTubeToken();
     }
 
     public static String testParse(String getUpdates) {

@@ -21,6 +21,7 @@ public class Telegram {
     private final String token;
     private static int lastUpdateId = 0;
 
+
     public Telegram(String token) {
         this.token = token;
     }

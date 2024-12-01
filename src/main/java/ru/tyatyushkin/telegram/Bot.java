@@ -16,9 +16,6 @@ public class Bot {
     private String channelId;
     private final Telegram telegram;
 
-    public static void setInit(String init) {
-        Bot.init = init;
-    }
 
     Weather weather;
 

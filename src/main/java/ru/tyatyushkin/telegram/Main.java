@@ -10,10 +10,7 @@ public class Main {
         boolean alpha_mode = Boolean.parseBoolean(System.getenv("ALPHA_MODE"));
         String app_token = System.getenv("TG_TOKEN");
 
-        if (app_token == null) {
-            LoggerConfig.logger.error("Ошибка: Переменная окружения TG_TOKEN не задана!");
-            System.exit(1);
-        }
+        Utils.checkTelegramToken();
 
         if (test_mode) {
             if (alpha_mode) {
