@@ -40,6 +40,13 @@ public class JSON {
         }
     }
 
+    private static void testReplyMessage(ArrayNode message) {
+        for (JsonNode jsonNode : message) {
+            JsonNode channelPost = jsonNode.get("channel_post");
+            System.out.println(channelPost.toPrettyString());
+        }
+    }
+
     private static boolean checkResult(JsonNode resultArray) {
         return resultArray != null && resultArray.isArray();
     }
@@ -55,6 +62,7 @@ public class JSON {
         JsonNode result = getResult(getUpdates);
         if (checkResult(result)) {
             testAnswer(parseMessages(result));
+            testReplyMessage(parseMessages(result));
             setTelegramUpdateId(result);
         }
     }
