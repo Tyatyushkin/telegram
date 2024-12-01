@@ -27,6 +27,7 @@ public class Bot {
         LoggerConfig.logger.info("--==START VARS INITIALIZE==--");
         // Check and create /opt/telegram directory if id does not exist
         Utils.checkTelegramDir();
+        Utils.checkLastVideoIdFile();
         // Init Vars
         String app_token = System.getenv("TG_TOKEN");
         String chatId = System.getenv("CHAT_ID");

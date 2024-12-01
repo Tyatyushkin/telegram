@@ -64,6 +64,20 @@ public class Utils {
         }
     }
 
+    public static void checkLastVideoIdFile() {
+        Path lastVideoIdFile = Paths.get("/opt/telegram/lastVideoID.txt");
+        if (!Files.exists(lastVideoIdFile)) {
+            try {
+                Files.createFile(lastVideoIdFile);
+                LoggerConfig.logger.info("lastVideoID.txt file created.");
+            } catch (IOException e) {
+                LoggerConfig.logger.error("Failed to create lastVideoID.txt file: ", e);
+                System.exit(1);
+            }
+        } else {
+            LoggerConfig.logger.info("lastVideoID.txt file already exists.");
+        }
+    }
     private static void checkTokens() {
         checkTelegramToken();
         checkYouTubeToken();
@@ -73,5 +87,6 @@ public class Utils {
     public static void init () {
         checkTokens();
         checkTelegramDir();
+        checkLastVideoIdFile();
     }
 }
