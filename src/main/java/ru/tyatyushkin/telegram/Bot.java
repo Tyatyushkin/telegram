@@ -49,6 +49,7 @@ public class Bot {
             LoggerConfig.logger.info("/opt/telegram directory already exists.");
         }
 
+        Utils.checkTelegramDir();
         // Init Vars
         String app_token = System.getenv("TG_TOKEN");
         String chatId = System.getenv("CHAT_ID");
