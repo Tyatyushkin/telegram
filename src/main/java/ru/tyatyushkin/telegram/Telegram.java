@@ -18,12 +18,14 @@ import java.nio.charset.StandardCharsets;
 
 public class Telegram {
     private static final String API_URL = "https://api.telegram.org/bot";
+    private static String s_token;
     private final String token;
     private static int lastUpdateId = 0;
 
 
     public Telegram(String token) {
         this.token = token;
+        s_token = token;
     }
 
     public static void setLastUpdateId(int updateId) {
@@ -61,6 +63,18 @@ public class Telegram {
         }
 
         return null;
+    }
+
+    public static void getSendMessage(String chatId, String message) {
+        try {
+            URL url = new URL(API_URL + s_token + "/sendMessage?chat_id=" + chatId + "&text=" + message);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.getInputStream().close();
+            conn.disconnect();
+        } catch (Exception e) {
+            LoggerConfig.logger.error("Неправильный запрос: ", e );
+        }
     }
 
     public void sendMessage(String chatId, String message) {
