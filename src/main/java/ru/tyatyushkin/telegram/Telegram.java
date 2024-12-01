@@ -26,7 +26,7 @@ public class Telegram {
         this.token = token;
     }
 
-    public void setLastUpdateId(int updateId) {
+    public static void setLastUpdateId(int updateId) {
         lastUpdateId = updateId;
     }
 

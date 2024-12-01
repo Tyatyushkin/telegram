@@ -11,12 +11,23 @@ public class JSON {
         return messages != null;
     }
 
-    private String getResult(String messages) throws JsonProcessingException {
+    private JsonNode getResult(String messages) throws JsonProcessingException {
         if (isCheck(messages)) {
             JsonNode rootNode = objectMapper.readTree(messages);
-            JsonNode resultArray = rootNode.get("result");
-            return resultArray.toString();
+            return rootNode.get("result");
         }
         return null;
+    }
+
+    private boolean checkResult(JsonNode resultArray) {
+        return resultArray != null && resultArray.isArray();
+    }
+
+    private void setTelegramUpdateId(JsonNode resultArray) {
+        for (JsonNode update : resultArray) {
+            int updateId = update.get("update_id").asInt();
+            JsonNode messageNode = update.get("message");
+            Telegram.setLastUpdateId(updateId);
+        }
     }
 }

@@ -175,7 +175,7 @@ public class Bot {
                         for (JsonNode update : resultArray) {
                             int updateId = update.get("update_id").asInt();
                             JsonNode channelPost = update.get("channel_post");
-                            telegram.setLastUpdateId(updateId);
+                            Telegram.setLastUpdateId(updateId);
                             System.out.println(channelPost.toPrettyString());
                         }
                     }
@@ -265,7 +265,7 @@ public class Bot {
                     int updateId = update.get("update_id").asInt();
                     JsonNode messageNode = update.get("message");
                     answerMessages(messageNode);
-                    telegram.setLastUpdateId(updateId);
+                    Telegram.setLastUpdateId(updateId);
                 }
             } catch (Exception e) {
                 e.printStackTrace(System.out);
