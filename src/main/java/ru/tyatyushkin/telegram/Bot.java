@@ -165,21 +165,22 @@ public class Bot {
         scheduler.addTaskAtFixedRate(() -> {
             try {
                 String messages = telegram.getUpdates();
-
-                if (messages != null) {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode rootNode = objectMapper.readTree(messages);
-                    JsonNode resultArray = rootNode.get("result");
-
-                    if (resultArray != null && resultArray.isArray()) {
-                        for (JsonNode update : resultArray) {
-                            int updateId = update.get("update_id").asInt();
-                            JsonNode channelPost = update.get("channel_post");
-                            Telegram.setLastUpdateId(updateId);
-                            System.out.println(channelPost.toPrettyString());
-                        }
-                    }
-                }
+                JSON.testTelegramParse(messages);
+                
+//                if (messages != null) {
+//                    ObjectMapper objectMapper = new ObjectMapper();
+//                    JsonNode rootNode = objectMapper.readTree(messages);
+//                    JsonNode resultArray = rootNode.get("result");
+//
+//                    if (resultArray != null && resultArray.isArray()) {
+//                        for (JsonNode update : resultArray) {
+//                            int updateId = update.get("update_id").asInt();
+//                            JsonNode channelPost = update.get("channel_post");
+//                            Telegram.setLastUpdateId(updateId);
+//                            System.out.println(channelPost.toPrettyString());
+//                        }
+//                    }
+//                }
             } catch (Exception e) {
                 LoggerConfig.logger.error("Ошибке: ", e);
             }
