@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Bot {
-    private static String init;
     private final String token;
     private String chatID;
     private String w_token;
