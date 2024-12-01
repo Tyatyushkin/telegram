@@ -161,7 +161,6 @@ public class Bot {
     public void createAlphaBot() {
         initialize();
         Utils.init();
-        System.out.println(init);
         Scheduler scheduler = new Scheduler();
         scheduler.addTaskAtFixedRate(() -> {
             try {
