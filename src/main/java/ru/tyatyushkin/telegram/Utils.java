@@ -1,8 +1,5 @@
 package ru.tyatyushkin.telegram;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +15,13 @@ public class Utils {
         return System.getenv("Y_TOKEN");
     }
 
+    private static String readWeatherToken() {
+        return System.getenv("W_TOKEN");
+    }
 
+    private static String readXToken() {
+        return System.getenv("X_TOKEN");
+    }
     public static void checkTelegramToken() {
         if (readTelegramToken() == null) {
             LoggerConfig.logger.error("Ошибка: Задайте значение переменной TG_TOKEN");
@@ -33,23 +36,19 @@ public class Utils {
         }
     }
 
-    public static void init () {
-        checkTelegramToken();
-        checkYouTubeToken();
-    }
-
-    public static String testParse(String getUpdates) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(getUpdates);
-            JsonNode resultArray = jsonNode.get("result");
-            System.out.println(resultArray.toPrettyString());
-        } catch (Exception e) {
-            LoggerConfig.logger.error("Ошибка: ", e);
+    private static void checkWeatherToken() {
+        if (readWeatherToken() == null) {
+            LoggerConfig.logger.error("Ошибка: Задайте значение переменной W_TOKEN");
+            System.exit(1);
         }
-        return null;
     }
 
+    private static void checkXToken() {
+        if ( readXToken() == null) {
+            LoggerConfig.logger.error("");
+            System.exit(1);
+        }
+    }
     public static void checkTelegramDir() {
         Path telegramDir = Paths.get("/opt/telegram");
         if (!Files.exists(telegramDir)) {
@@ -65,5 +64,14 @@ public class Utils {
         }
     }
 
-
+    private static void checkTokens() {
+        checkTelegramToken();
+        checkYouTubeToken();
+        checkWeatherToken();
+        checkXToken();
+    }
+    public static void init () {
+        checkTokens();
+        checkTelegramDir();
+    }
 }
