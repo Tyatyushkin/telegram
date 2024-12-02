@@ -45,7 +45,6 @@ public class JSON {
     private static void testReplyMessage(JsonNode message) {
         for (JsonNode jsonNode : message) {
             if (jsonNode.has("channel_post")) {
-                System.out.println(jsonNode.toPrettyString());
                 JsonNode channelPost = jsonNode.get("channel_post");
                 System.out.println(channelPost.toPrettyString());
             }
