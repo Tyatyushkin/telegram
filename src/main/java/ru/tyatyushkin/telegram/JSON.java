@@ -30,22 +30,9 @@ public class JSON {
         return test;
     }
 
-
-
-    private static boolean checkMessage(ArrayNode message) {
-        boolean ans = false;
-        for (JsonNode jsonNode : message) {
-            ans = jsonNode != null && jsonNode.isArray() ;
-        }
-        return ans;
-    }
-
-    private static boolean checkMessage(JsonNode message) {
-        return message != null && message.isArray();
-    }
     private static void testAnswer(ArrayNode test) {
-        if (checkMessage(test)) {
-            for (JsonNode jsonNode : test) {
+        for (JsonNode jsonNode : test) {
+            if (jsonNode.has("text")) {
                 String text = jsonNode.get("text").asText();
                 String chatId = jsonNode.get("chat").get("id").asText();
                 if (text.equalsIgnoreCase("hello")) {
@@ -56,8 +43,8 @@ public class JSON {
     }
 
     private static void testReplyMessage(JsonNode message) {
-        if (checkMessage(message)) {
-            for (JsonNode jsonNode : message) {
+        for (JsonNode jsonNode : message) {
+            if (jsonNode.has("channel_post")) {
                 System.out.println(jsonNode.toPrettyString());
                 JsonNode channelPost = jsonNode.get("channel_post");
                 System.out.println(channelPost.toPrettyString());
@@ -79,7 +66,7 @@ public class JSON {
     public static void testTelegramParse(String getUpdates) throws JsonProcessingException {
         JsonNode result = getResult(getUpdates);
         if (checkResult(result)) {
-            //testAnswer(parseMessages(result));
+            testAnswer(parseMessages(result));
             testReplyMessage(result);
             setTelegramUpdateId(result);
         }
