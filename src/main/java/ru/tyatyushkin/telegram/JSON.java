@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
 public class JSON {
@@ -40,6 +40,13 @@ public class JSON {
                 }
             }
         }
+    }
+
+    private static String getMessage(String chatId, String text) throws JsonProcessingException {
+        ObjectNode message = objectMapper.createObjectNode();
+        message.put("chat_id", chatId);
+        message.put("text", text);
+        return objectMapper.writeValueAsString(message);
     }
 
     private static void testReplyMessage(JsonNode message) {
