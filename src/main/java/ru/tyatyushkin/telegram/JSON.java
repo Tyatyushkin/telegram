@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JSON {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static String mpn = "5103942483";
 
     private static boolean isCheck(String messages) {
         return messages != null;
@@ -49,11 +50,14 @@ public class JSON {
         return objectMapper.writeValueAsString(message);
     }
 
-    private static void testReplyMessage(JsonNode message) {
+    private static void testReplyMessage(JsonNode message) throws JsonProcessingException {
         for (JsonNode jsonNode : message) {
             if (jsonNode.has("channel_post")) {
                 JsonNode channelPost = jsonNode.get("channel_post");
-                System.out.println(channelPost.toPrettyString());
+                if (channelPost.has("text")) {
+                    String text = channelPost.get("text").asText();
+                    Telegram.sendReplyMessage(getMessage(mpn, text));
+                }
             }
         }
     }
