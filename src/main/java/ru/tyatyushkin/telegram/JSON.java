@@ -58,6 +58,9 @@ public class JSON {
                     String text = channelPost.get("text").asText();
                     Telegram.sendReplyMessage(getMessage(mpn, text));
                 }
+                if (channelPost.has("photo")) {
+                    System.out.println(channelPost.toPrettyString());
+                }
             }
         }
     }
