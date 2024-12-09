@@ -187,6 +187,10 @@ public class Telegram {
         }
     }
 
+    public static void sendPhotoWithCaption() {
+
+    }
+
     public void sendInlineButton(String chatId) {
         try {
         JSONObject message = new JSONObject();

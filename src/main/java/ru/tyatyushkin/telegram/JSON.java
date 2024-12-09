@@ -50,6 +50,14 @@ public class JSON {
         return objectMapper.writeValueAsString(message);
     }
 
+    private static String getMessageWithPicture(String chatId, String photoUrl, String text) throws JsonProcessingException {
+        ObjectNode message = objectMapper.createObjectNode();
+        message.put("chat_id", chatId);
+        message.put("photo", photoUrl);
+        message.put("caption", text);
+        return objectMapper.writeValueAsString(message);
+    }
+
     private static void testReplyMessage(JsonNode message) throws JsonProcessingException {
         for (JsonNode jsonNode : message) {
             if (jsonNode.has("channel_post")) {
@@ -59,7 +67,7 @@ public class JSON {
                     Telegram.sendReplyMessage(getMessage(mpn, text));
                 }
                 if (channelPost.has("photo")) {
-                    System.out.println(channelPost.toPrettyString());
+                    System.out.println(jsonNode.toPrettyString());
                 }
             }
         }
