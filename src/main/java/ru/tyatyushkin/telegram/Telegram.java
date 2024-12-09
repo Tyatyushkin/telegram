@@ -187,8 +187,29 @@ public class Telegram {
         }
     }
 
-    public static void sendPhotoWithCaption() {
+    public static void sendPhotoWithCaption(String message) {
+        try {
+            URL url = new URL(API_URL + s_token + "/sendPhoto");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setDoOutput(true);
 
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = message.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                LoggerConfig.logger.info("Reply Message sent successfully.");
+            } else {
+                LoggerConfig.logger.error("Failed to send reply message. Response Code: ", responseCode);
+            }
+
+        } catch (Exception e) {
+            LoggerConfig.logger.error("Ошибке: ", e);
+        }
     }
 
     public void sendInlineButton(String chatId) {

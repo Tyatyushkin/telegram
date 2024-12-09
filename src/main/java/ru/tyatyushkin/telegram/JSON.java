@@ -67,6 +67,7 @@ public class JSON {
                     Telegram.sendReplyMessage(getMessage(mpn, text));
                 }
                 if (channelPost.has("photo")) {
+                    Telegram.sendPhotoWithCaption(getMessageWithPicture(mpn, "https://64.media.tumblr.com/ff05749b6c4319b01aa4266e62bba191/9540d1c5f001612f-ed/s400x600/bd4cd96e60106569ab2e0b6c9f5a3c5afa9903aa.jpg", "сиське"));
                     System.out.println(jsonNode.toPrettyString());
                 }
             }
